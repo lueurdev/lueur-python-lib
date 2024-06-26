@@ -22,7 +22,8 @@ async def test_list_project_zones(gcp_project: str) -> None:
         params={"fields": "items.name"},
     ).respond(content=msgspec.json.encode({"items": [{"name": "us-east1-a"}]}))
 
-    assert await list_project_zones(gcp_project) == ["us-east1-a"]
+    with patch_auth():
+        assert await list_project_zones(gcp_project) == ["us-east1-a"]
 
 
 @respx.mock
