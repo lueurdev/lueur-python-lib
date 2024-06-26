@@ -3,7 +3,7 @@ name: Release
 on:
   pull_request:
     branches-ignore:
-      - 'master'
+      - 'main'
   push:
     tags:
       - '[0-9]+.[0-9]+.[0-9]+'
