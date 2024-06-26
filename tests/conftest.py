@@ -5,9 +5,9 @@ import pytest
 from google.auth.credentials import AnonymousCredentials
 
 
-@pytest.fixture(scope="session", autouse=True)
-def default_async():
-    with patch("lueur.platform.gcp.client.default_async", autospec=True) as p:
+@pytest.fixture(autouse=True)
+def default_async(*args, **kwargs):
+    with patch("lueur.platform.gcp.client.default_async", autospec=True):
         return (AnonymousCredentials(), "")
 
 
