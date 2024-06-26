@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.1.0..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.2.0..HEAD
+
+## [0.2.0][] - 2024-06-26
+
+[0.2.0]: https://github.com/lueurdev/lueur/compare/0.1.0..0.2.0
+
+### Added
+
+-   Pass explicit credentials to GCP when needed by caller
 
 ## [0.1.0][] - 2024-06-26
 

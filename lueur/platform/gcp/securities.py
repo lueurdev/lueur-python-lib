@@ -1,5 +1,6 @@
 # mypy: disable-error-code="union-attr"
 import msgspec
+from google.oauth2._service_account_async import Credentials
 
 from lueur.make_id import make_id
 from lueur.models import GCPMeta, Resource
@@ -9,11 +10,11 @@ __all__ = ["explore_securities"]
 
 
 async def explore_securities(
-    project: str, location: str | None = None
+    project: str, location: str | None = None, creds: Credentials | None = None
 ) -> list[Resource]:
     resources = []
 
-    async with Client("https://compute.googleapis.com") as c:
+    async with Client("https://compute.googleapis.com", creds) as c:
         if not location:
             securities = await explore_global_securities(c, project)
             resources.extend(securities)

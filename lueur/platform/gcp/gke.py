@@ -3,6 +3,7 @@ import asyncio
 from typing import Any
 
 import msgspec
+from google.oauth2._service_account_async import Credentials
 
 from lueur.links import add_link
 from lueur.make_id import make_id
@@ -13,10 +14,12 @@ from lueur.rules import iter_resource
 __all__ = ["explore_gke"]
 
 
-async def explore_gke(project: str, location: str) -> list[Resource]:
+async def explore_gke(
+    project: str, location: str, creds: Credentials | None = None
+) -> list[Resource]:
     resources = []
 
-    async with Client("https://container.googleapis.com") as c:
+    async with Client("https://container.googleapis.com", creds) as c:
         clusters = await explore_clusters(c, project, location)
         resources.extend(clusters)
 

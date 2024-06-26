@@ -2,6 +2,7 @@
 from typing import Any
 
 import msgspec
+from google.oauth2._service_account_async import Credentials
 
 from lueur.links import add_link
 from lueur.make_id import make_id
@@ -12,14 +13,16 @@ from lueur.rules import iter_resource
 __all__ = ["explore_cloudrun"]
 
 
-async def explore_cloudrun(project: str, location: str) -> list[Resource]:
+async def explore_cloudrun(
+    project: str, location: str, creds: Credentials | None = None
+) -> list[Resource]:
     resources = []
 
-    async with Client("https://run.googleapis.com") as c:
+    async with Client("https://run.googleapis.com", creds) as c:
         services = await explore_services(c, project, location)
         resources.extend(services)
 
-    async with Client("https://vpcaccess.googleapis.com") as c:
+    async with Client("https://vpcaccess.googleapis.com", creds) as c:
         connectors = await explore_vpcaccess_connectors(c, project, location)
         resources.extend(connectors)
 

@@ -3,6 +3,8 @@ import asyncio
 import logging
 from typing import Any
 
+from google.oauth2._service_account_async import Credentials
+
 from lueur.make_id import make_id
 from lueur.models import Discovery, Meta
 from lueur.platform.gcp.cloudrun import expand_links as cloudrun_links
@@ -24,7 +26,9 @@ __all__ = ["explore", "expand_links"]
 logger = logging.getLogger("lueur.lib")
 
 
-async def explore(project: str, location: str | None = None) -> Discovery:
+async def explore(
+    project: str, location: str | None = None, creds: Credentials | None = None
+) -> Discovery:
     resources = []
     tasks: list[asyncio.Task] = []
 
@@ -32,48 +36,57 @@ async def explore(project: str, location: str | None = None) -> Discovery:
         if location:
             tasks.append(
                 tg.create_task(
-                    explore_gke(project, location), name="explore_gke"
+                    explore_gke(project, location, creds), name="explore_gke"
                 )
             )
             tasks.append(
                 tg.create_task(
-                    explore_cloudrun(project, location), name="explore_cloudrun"
+                    explore_cloudrun(project, location, creds),
+                    name="explore_cloudrun",
                 )
             )
             tasks.append(
-                tg.create_task(explore_lb(project, location), name="explore_lb")
+                tg.create_task(
+                    explore_lb(project, location, creds), name="explore_lb"
+                )
             )
             tasks.append(
                 tg.create_task(
-                    explore_connector(project, location),
+                    explore_connector(project, location, creds),
                     name="explore_connector",
                 )
             )
             tasks.append(
                 tg.create_task(
-                    explore_securities(project, location),
+                    explore_securities(project, location, creds),
                     name="explore_securities",
                 )
             )
         else:
             tasks.append(
-                tg.create_task(explore_sql(project), name="explore_global_sql")
-            )
-            tasks.append(
-                tg.create_task(explore_lb(project), name="explore_global_lb")
-            )
-            tasks.append(
-                tg.create_task(explore_vpc(project), name="explore_global_vpc")
+                tg.create_task(
+                    explore_sql(project, creds), name="explore_global_sql"
+                )
             )
             tasks.append(
                 tg.create_task(
-                    explore_monitoring(project),
+                    explore_lb(project, None, creds), name="explore_global_lb"
+                )
+            )
+            tasks.append(
+                tg.create_task(
+                    explore_vpc(project, creds), name="explore_global_vpc"
+                )
+            )
+            tasks.append(
+                tg.create_task(
+                    explore_monitoring(project, creds),
                     name="explore_global_monitoring",
                 )
             )
             tasks.append(
                 tg.create_task(
-                    explore_securities(project),
+                    explore_securities(project, None, creds),
                     name="explore_global_securities",
                 )
             )

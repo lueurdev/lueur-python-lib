@@ -1,6 +1,7 @@
 import asyncio
 
 import msgspec
+from google.oauth2._service_account_async import Credentials
 
 from lueur.make_id import make_id
 from lueur.models import GCPMeta, Resource
@@ -9,10 +10,12 @@ from lueur.platform.gcp.client import AuthorizedSession, Client
 __all__ = ["explore_connector"]
 
 
-async def explore_connector(project: str, location: str) -> list[Resource]:
+async def explore_connector(
+    project: str, location: str, creds: Credentials | None = None
+) -> list[Resource]:
     resources = []
 
-    async with Client("https://connectors.googleapis.com") as c:
+    async with Client("https://connectors.googleapis.com", creds) as c:
         providers = await explore_connector_providers(c, project, location)
         resources.extend(providers)
 

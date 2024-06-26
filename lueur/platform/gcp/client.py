@@ -8,6 +8,7 @@ import httpx
 from google.auth import exceptions, transport
 from google.auth._credentials_async import Credentials
 from google.auth._default_async import default_async
+from google.oauth2._service_account_async import Credentials as OAuthCreds
 
 __all__ = ["Client", "AuthorizedSession"]
 
@@ -149,7 +150,7 @@ class AuthorizedSession(httpx.AsyncClient):
 
     def __init__(
         self,
-        credentials: Credentials,
+        credentials: Credentials | OAuthCreds,
         refresh_status_codes=transport.DEFAULT_REFRESH_STATUS_CODES,
         max_refresh_attempts=transport.DEFAULT_MAX_REFRESH_ATTEMPTS,
         refresh_timeout=None,
@@ -263,9 +264,13 @@ class AuthorizedSession(httpx.AsyncClient):
 
 
 @asynccontextmanager
-async def Client(base_url: str) -> AsyncIterator[AuthorizedSession]:
-    credentials, _ = default_async()
+async def Client(
+    base_url: str, creds: OAuthCreds | None = None
+) -> AsyncIterator[AuthorizedSession]:
+    credentials = creds
+    if creds is None:
+        credentials, _ = default_async()
 
-    async with AuthorizedSession(credentials) as s:
+    async with AuthorizedSession(credentials) as s:  # type: ignore
         s.base_url = httpx.URL(base_url)
         yield s
