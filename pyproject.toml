@@ -73,7 +73,7 @@ composite = [
 [tool.pdm.scripts.format]
 composite = [
     "ruff check --target-version py311 --fix lueur/",
-    "ruff format --target-version py311 lueur/",
+    "ruff format --target-version py311 lueur/ tests/",
 ]
 
 [tool.ruff]
