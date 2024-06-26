@@ -1,6 +1,14 @@
 from typing import Any
+from unittest.mock import patch
 
 import pytest
+from google.auth.credentials import AnonymousCredentials
+
+
+@pytest.fixture(scope="session", autouse=True)
+def default_async():
+    with patch("lueur.platform.gcp.client.default_async", autospec=True) as p:
+        return (AnonymousCredentials(), "")
 
 
 @pytest.fixture(scope="session")
@@ -78,11 +86,8 @@ def gcp_sql_instance_database_name() -> str:
 def gcp_cloudrun_services(
     gcp_project: str,
     gcp_region: str,
-    gcp_project_number: str,
     gcp_cloudrun_service_A: str,
-    gcp_cloudrun_service_B: str,
     gcp_cloudrun_service_account_A: str,
-    gcp_cloudrun_service_account_B: str
 ) -> list[dict[str, Any]]:
     return [
         {
