@@ -31,7 +31,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pdm sync -d
+          pdm sync -d -G gcp -G aws -G k8s
 
       - name: Run Lint
         run: |
