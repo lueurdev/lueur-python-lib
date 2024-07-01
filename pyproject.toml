@@ -105,6 +105,9 @@ select = [
     "W",
     "I001"
 ]
+ignore = [
+    "RET503"
+]
 
 [tool.pytest.ini_options]
 minversion = "6.0"
