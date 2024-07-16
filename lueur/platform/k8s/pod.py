@@ -33,7 +33,9 @@ async def explore_pods(c: AsyncClient) -> list[Resource]:
         results.append(
             Resource(
                 id=make_id(meta["uid"]),
-                meta=Meta(name=meta["name"], kind="k8s/pod"),
+                meta=Meta(
+                    name=meta["name"], display=meta["name"], kind="k8s/pod"
+                ),
                 struct=pod,
             )
         )

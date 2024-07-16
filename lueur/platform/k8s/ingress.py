@@ -33,7 +33,11 @@ async def explore_ingresses(c: AsyncClient) -> list[Resource]:
         results.append(
             Resource(
                 id=make_id(meta["uid"]),
-                meta=Meta(name=meta["name"], kind="k8s/ingress"),
+                meta=Meta(
+                    name=meta["name"],
+                    display=meta["name"],
+                    kind="k8s/ingress"
+                ),
                 struct=ingress,
             )
         )

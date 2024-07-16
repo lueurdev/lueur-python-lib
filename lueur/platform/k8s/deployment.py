@@ -33,7 +33,11 @@ async def explore_deployments(c: AsyncClient) -> list[Resource]:
         results.append(
             Resource(
                 id=make_id(meta["uid"]),
-                meta=Meta(name=meta["name"], kind="k8s/deployment"),
+                meta=Meta(
+                    name=meta["name"],
+                    display=meta["name"],
+                    kind="k8s/deployment"
+                ),
                 struct=deployment,
             )
         )

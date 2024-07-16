@@ -33,7 +33,9 @@ async def explore_services(c: AsyncClient) -> list[Resource]:
         results.append(
             Resource(
                 id=make_id(meta["uid"]),
-                meta=Meta(name=meta["name"], kind="k8s/service"),
+                meta=Meta(
+                    name=meta["name"], display=meta["name"], kind="k8s/service"
+                ),
                 struct=service,
             )
         )

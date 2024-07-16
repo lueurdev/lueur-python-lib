@@ -33,7 +33,11 @@ async def explore_network_policies(c: AsyncClient) -> list[Resource]:
         results.append(
             Resource(
                 id=make_id(meta["uid"]),
-                meta=Meta(name=meta["name"], kind="k8s/network-policy"),
+                meta=Meta(
+                    name=meta["name"],
+                    display=meta["name"],
+                    kind="k8s/network-policy"
+                ),
                 struct=policy,
             )
         )

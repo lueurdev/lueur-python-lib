@@ -31,6 +31,7 @@ async def explore_monitoring(
             tasks.append(
                 tg.create_task(explore_notification_channels(c, project))
             )
+            tasks.append(tg.create_task(explore_incidents(c, project)))
 
             for svc in services:
                 tasks.append(
@@ -173,6 +174,33 @@ async def explore_groups(c: AuthorizedSession, project: str) -> list[Resource]:
                     name=name,
                     display=display,
                     kind="group",
+                    project=project,
+                ),
+                struct=g,
+            )
+        )
+
+    return results
+
+
+async def explore_incidents(
+    c: AuthorizedSession, project: str
+) -> list[Resource]:
+    response = await c.get(f"/v3/projects/{project}/incidents")
+
+    incidents = msgspec.json.decode(response.content)
+
+    results = []
+    for g in incidents.get("incidents", []):
+        name = g["name"]
+        display = g["name"]
+        results.append(
+            Resource(
+                id=make_id(name),
+                meta=GCPMeta(
+                    name=name,
+                    display=display,
+                    kind="incident",
                     project=project,
                 ),
                 struct=g,

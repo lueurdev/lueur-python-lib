@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.3.0..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.3.1..HEAD
+
+## [0.3.1][] - 2024-07-16
+
+[0.3.1]: https://github.com/lueurdev/lueur/compare/0.3.0..0.3.1
+
+### Fixed
+
+-   Add display to Kubernetes meta
 
 ## [0.3.0][] - 2024-07-01
 
