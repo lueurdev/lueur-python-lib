@@ -36,7 +36,7 @@ async def explore_network_policies(c: AsyncClient) -> list[Resource]:
                 meta=Meta(
                     name=meta["name"],
                     display=meta["name"],
-                    kind="k8s/network-policy"
+                    kind="k8s/network-policy",
                 ),
                 struct=policy,
             )

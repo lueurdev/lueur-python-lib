@@ -36,7 +36,7 @@ async def explore_deployments(c: AsyncClient) -> list[Resource]:
                 meta=Meta(
                     name=meta["name"],
                     display=meta["name"],
-                    kind="k8s/deployment"
+                    kind="k8s/deployment",
                 ),
                 struct=deployment,
             )

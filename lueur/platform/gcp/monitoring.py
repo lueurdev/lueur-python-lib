@@ -31,7 +31,9 @@ async def explore_monitoring(
             tasks.append(
                 tg.create_task(explore_notification_channels(c, project))
             )
-            tasks.append(tg.create_task(explore_incidents(c, project)))
+
+            # uncomment once API is publicly available
+            # tasks.append(tg.create_task(explore_incidents(c, project)))
 
             for svc in services:
                 tasks.append(

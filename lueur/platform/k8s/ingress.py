@@ -34,9 +34,7 @@ async def explore_ingresses(c: AsyncClient) -> list[Resource]:
             Resource(
                 id=make_id(meta["uid"]),
                 meta=Meta(
-                    name=meta["name"],
-                    display=meta["name"],
-                    kind="k8s/ingress"
+                    name=meta["name"], display=meta["name"], kind="k8s/ingress"
                 ),
                 struct=ingress,
             )
