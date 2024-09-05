@@ -36,7 +36,7 @@ async def explore_services(c: AsyncClient) -> list[Resource]:
                 meta=K8SMeta(
                     name=meta["name"],
                     display=meta["name"],
-                    kind="k8s/service",
+                    kind="service",
                     platform="k8s",
                     ns=meta["namespace"],
                 ),

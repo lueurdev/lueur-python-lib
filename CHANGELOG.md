@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.4.0..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.4.1..HEAD
+
+## [0.4.1][] - 2024-09-05
+
+[0.4.1]: https://github.com/lueurdev/lueur/compare/0.4.0..0.4.1
+
+### Fixed
+
+-   Amend from `k8s/service` to `service`
 
 ## [0.4.0][] - 2024-09-05
 
