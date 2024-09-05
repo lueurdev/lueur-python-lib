@@ -51,7 +51,7 @@ class AWSMeta(Meta):
 
 class Resource(BaseModel):
     id: str
-    meta: Meta | GCPMeta
+    meta: Meta | GCPMeta | AWSMeta | K8SMeta
     links: list[Link] = Field(default_factory=list)
     struct: dict
 
