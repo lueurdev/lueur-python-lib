@@ -4,6 +4,10 @@
 
 [Unreleased]: https://github.com/lueurdev/lueur/compare/0.3.1..HEAD
 
+### Changed
+
+-   Bump dependencies
+
 ## [0.3.1][] - 2024-07-16
 
 [0.3.1]: https://github.com/lueurdev/lueur/compare/0.3.0..0.3.1
