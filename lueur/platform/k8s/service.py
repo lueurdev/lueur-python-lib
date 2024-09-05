@@ -3,7 +3,7 @@ import msgspec
 from kubernetes import client
 
 from lueur.make_id import make_id
-from lueur.models import Meta, Resource
+from lueur.models import K8SMeta, Resource
 from lueur.platform.k8s.client import AsyncClient, Client
 
 __all__ = ["explore_service"]
@@ -33,8 +33,12 @@ async def explore_services(c: AsyncClient) -> list[Resource]:
         results.append(
             Resource(
                 id=make_id(meta["uid"]),
-                meta=Meta(
-                    name=meta["name"], display=meta["name"], kind="k8s/service"
+                meta=K8SMeta(
+                    name=meta["name"],
+                    display=meta["name"],
+                    kind="k8s/service",
+                    platform="k8s",
+                    ns=meta["namespace"],
                 ),
                 struct=service,
             )

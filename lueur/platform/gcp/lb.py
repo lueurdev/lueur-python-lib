@@ -84,6 +84,7 @@ async def explore_global_urlmaps(
                     display=urlmap["name"],
                     kind="global-urlmap",
                     project=project,
+                    platform="gcp",
                 ),
                 struct=urlmap,
             )
@@ -106,6 +107,7 @@ async def explore_global_backend_services(
     for backend_service in backend_services.get("items", []):
         name = backend_service["name"]
         display = name
+        self_link = backend_service.get("selfLink")
 
         results.append(
             Resource(
@@ -115,6 +117,8 @@ async def explore_global_backend_services(
                     display=display,
                     kind="global-backend-service",
                     project=project,
+                    platform="gcp",
+                    self_link=self_link,
                 ),
                 struct=backend_service,
             )
@@ -139,6 +143,7 @@ async def explore_global_backend_groups(
         display = name
         region = backend_group.get("region")
         zone = backend_group.get("zone")
+        self_link = backend_group.get("selfLink")
         if zone:
             _, zone = zone.rsplit("/", 1)
 
@@ -152,6 +157,8 @@ async def explore_global_backend_groups(
                     project=project,
                     region=region,
                     zone=zone,
+                    platform="gcp",
+                    self_link=self_link,
                 ),
                 struct=backend_group,
             )
@@ -172,6 +179,8 @@ async def explore_regional_urlmaps(
 
     results = []
     for urlmap in urlmaps.get("items", []):
+        self_link = urlmap.get("selfLink")
+
         results.append(
             Resource(
                 id=make_id(urlmap["id"]),
@@ -181,6 +190,8 @@ async def explore_regional_urlmaps(
                     kind="regional-urlmap",
                     project=project,
                     region=location,
+                    platform="gcp",
+                    self_link=self_link,
                 ),
                 struct=urlmap,
             )
@@ -203,6 +214,7 @@ async def explore_regional_backend_services(
     for backend_service in backend_services.get("items", []):
         name = backend_service["name"]
         region = backend_service["region"]
+        self_link = backend_service.get("selfLink")
         display = name
 
         results.append(
@@ -214,6 +226,8 @@ async def explore_regional_backend_services(
                     kind="regional-backend-service",
                     project=project,
                     region=region,
+                    platform="gcp",
+                    self_link=self_link,
                 ),
                 struct=backend_service,
             )
@@ -237,6 +251,7 @@ async def explore_regional_backend_groups(
     for backend_group in backend_groups.get("items", []):
         name = backend_group["name"]
         display = name
+        self_link = backend_group.get("selfLink")
         zone = backend_group.get("zone")
         if zone:
             _, zone = zone.rsplit("/", 1)
@@ -251,6 +266,8 @@ async def explore_regional_backend_groups(
                     project=project,
                     region=location,
                     zone=zone,
+                    platform="gcp",
+                    self_link=self_link,
                 ),
                 struct=backend_group,
             )
@@ -288,6 +305,7 @@ async def explore_zonal_backend_groups(
         for backend_group in backend_groups.get("items", []):
             name = backend_group["name"]
             display = name
+            self_link = backend_group.get("selfLink")
             region = backend_group.get("region")
             if region:
                 _, region = region.rsplit("/", 1)
@@ -302,6 +320,8 @@ async def explore_zonal_backend_groups(
                         project=project,
                         region=region,
                         zone=zone,
+                        platform="gcp",
+                        self_link=self_link,
                     ),
                     struct=backend_group,
                 )

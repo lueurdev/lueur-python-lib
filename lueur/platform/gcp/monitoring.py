@@ -63,11 +63,18 @@ async def explore_services(
     for svc in services["services"]:
         name = svc["name"]
         display = svc["displayName"]
+        self_link = svc.get("selfLink")
+
         results.append(
             Resource(
                 id=make_id(name),
                 meta=GCPMeta(
-                    name=name, display=display, kind="service", project=project
+                    name=name,
+                    display=display,
+                    kind="service",
+                    project=project,
+                    platform="gcp",
+                    self_link=self_link,
                 ),
                 struct=svc,
             )
@@ -93,11 +100,18 @@ async def explore_slos(
     for slo in slos["serviceLevelObjectives"]:
         name = slo["name"]
         display = slo["displayName"]
+        self_link = slo.get("selfLink")
+
         results.append(
             Resource(
                 id=make_id(slo["name"]),
                 meta=GCPMeta(
-                    name=name, display=display, kind="slo", project=project
+                    name=name,
+                    display=display,
+                    kind="slo",
+                    project=project,
+                    platform="gcp",
+                    self_link=self_link,
                 ),
                 struct=slo,
             )
@@ -117,6 +131,8 @@ async def explore_alert_policies(
     for nc in policies["alertPolicies"]:
         name = nc["name"]
         display = nc["displayName"]
+        self_link = nc.get("selfLink")
+
         results.append(
             Resource(
                 id=make_id(name),
@@ -125,6 +141,8 @@ async def explore_alert_policies(
                     display=display,
                     kind="alert-policy",
                     project=project,
+                    platform="gcp",
+                    self_link=self_link,
                 ),
                 struct=nc,
             )
@@ -144,6 +162,8 @@ async def explore_notification_channels(
     for nc in channels["notificationChannels"]:
         name = nc["name"]
         display = nc["displayName"]
+        self_link = nc.get("selfLink")
+
         results.append(
             Resource(
                 id=make_id(name),
@@ -152,6 +172,8 @@ async def explore_notification_channels(
                     display=display,
                     kind="notification-channel",
                     project=project,
+                    platform="gcp",
+                    self_link=self_link,
                 ),
                 struct=nc,
             )
@@ -169,6 +191,8 @@ async def explore_groups(c: AuthorizedSession, project: str) -> list[Resource]:
     for g in groups.get("group", []):
         name = g["name"]
         display = g["displayName"]
+        self_link = g.get("selfLink")
+
         results.append(
             Resource(
                 id=make_id(name),
@@ -177,6 +201,8 @@ async def explore_groups(c: AuthorizedSession, project: str) -> list[Resource]:
                     display=display,
                     kind="group",
                     project=project,
+                    platform="gcp",
+                    self_link=self_link,
                 ),
                 struct=g,
             )
@@ -196,6 +222,8 @@ async def explore_incidents(
     for g in incidents.get("incidents", []):
         name = g["name"]
         display = g["name"]
+        self_link = g.get("selfLink")
+
         results.append(
             Resource(
                 id=make_id(name),
@@ -204,6 +232,8 @@ async def explore_incidents(
                     display=display,
                     kind="incident",
                     project=project,
+                    platform="gcp",
+                    self_link=self_link,
                 ),
                 struct=g,
             )

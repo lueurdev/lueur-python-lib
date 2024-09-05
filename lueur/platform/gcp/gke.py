@@ -7,7 +7,7 @@ from google.oauth2._service_account_async import Credentials
 
 from lueur.links import add_link
 from lueur.make_id import make_id
-from lueur.models import Discovery, Link, Meta, Resource
+from lueur.models import Discovery, GCPMeta, Link, Resource
 from lueur.platform.gcp.client import AuthorizedSession, Client
 from lueur.rules import iter_resource
 
@@ -56,10 +56,20 @@ async def explore_clusters(
 
     results = []
     for cl in clusters["clusters"]:
+        self_link = cl.get("selfLink")
+
         results.append(
             Resource(
                 id=make_id(cl["id"]),
-                meta=Meta(name=cl["name"], display=cl["name"], kind="cluster"),
+                meta=GCPMeta(
+                    name=cl["name"],
+                    display=cl["name"],
+                    kind="cluster",
+                    platform="gcp",
+                    project=project,
+                    region=location,
+                    self_link=self_link,
+                ),
                 struct=cl,
             )
         )
@@ -78,10 +88,20 @@ async def explore_nodepools(
 
     results = []
     for np in node_pools["nodePools"]:
+        self_link = np.get("selfLink")
+
         results.append(
             Resource(
                 id=make_id(np["selfLink"]),
-                meta=Meta(name=np["name"], display=np["name"], kind="nodepool"),
+                meta=GCPMeta(
+                    name=np["name"],
+                    display=np["name"],
+                    kind="nodepool",
+                    platform="gcp",
+                    project=project,
+                    region=location,
+                    self_link=self_link,
+                ),
                 struct=np,
             )
         )

@@ -1,7 +1,7 @@
 from concurrent.futures import ThreadPoolExecutor
 
 from lueur.make_id import make_id
-from lueur.models import Meta, Resource
+from lueur.models import AWSMeta, Resource
 from lueur.platform.aws.client import Client
 
 __all__ = ["explore_ecr"]
@@ -47,10 +47,12 @@ def explore_repositories(region: str) -> list[Resource]:
             results.append(
                 Resource(
                     id=make_id(repository["repositoryArn"]),
-                    meta=Meta(
+                    meta=AWSMeta(
                         name=repository["repositoryName"],
                         display=repository["repositoryName"],
                         kind="repository",
+                        platform="aws",
+                        region=region,
                     ),
                     struct=repository,
                 )
@@ -73,7 +75,13 @@ def explore_images(
         results.append(
             Resource(
                 id=make_id(image["imageDigest"]),
-                meta=Meta(name=name, display=name, kind="image"),
+                meta=AWSMeta(
+                    name=name,
+                    display=name,
+                    kind="image",
+                    platform="aws",
+                    region=region,
+                ),
                 struct=image,
             )
         )

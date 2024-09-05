@@ -4,7 +4,7 @@ from typing import Any
 
 from lueur.links import add_link
 from lueur.make_id import make_id
-from lueur.models import Discovery, Link, Meta, Resource
+from lueur.models import AWSMeta, Discovery, Link, Resource
 from lueur.platform.aws.client import Client
 from lueur.rules import iter_resource
 
@@ -50,10 +50,12 @@ def explore_load_balancers(region: str) -> list[Resource]:
             results.append(
                 Resource(
                     id=make_id(lb["LoadBalancerArn"]),
-                    meta=Meta(
+                    meta=AWSMeta(
                         name=lb["LoadBalancerArn"],
                         display=lb["LoadBalancerName"],
                         kind="loadbalancer",
+                        platform="aws",
+                        region=region,
                     ),
                     struct=lb,
                 )
@@ -73,10 +75,12 @@ def explore_target_groups(region: str, lb_name: str) -> list[Resource]:
         results.append(
             Resource(
                 id=make_id(tg["TargetGroupArn"]),
-                meta=Meta(
+                meta=AWSMeta(
                     name=tg["TargetGroupArn"],
                     display=tg["TargetGroupName"],
                     kind="target-group",
+                    platform="aws",
+                    region=region,
                 ),
                 struct=tg,
             )
@@ -96,10 +100,12 @@ def explore_listeners(region: str, lb_name: str) -> list[Resource]:
         results.append(
             Resource(
                 id=make_id(listener["ListenerArn"]),
-                meta=Meta(
+                meta=AWSMeta(
                     name=listener["ListenerArn"],
                     display=listener["ListenerArn"],
                     kind="listener",
+                    platform="aws",
+                    region=region,
                 ),
                 struct=listener,
             )
@@ -121,10 +127,12 @@ def explore_rules(region: str, listener_arn: str) -> list[Resource]:
         results.append(
             Resource(
                 id=make_id(rule["RuleArn"]),
-                meta=Meta(
+                meta=AWSMeta(
                     name=rule["RuleArn"],
                     display=rule["RuleArn"],
                     kind="listener-rule",
+                    platform="aws",
+                    region=region,
                 ),
                 struct=rule,
             )

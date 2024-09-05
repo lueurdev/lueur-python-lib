@@ -1,7 +1,7 @@
 from concurrent.futures import ThreadPoolExecutor
 
 from lueur.make_id import make_id
-from lueur.models import Meta, Resource
+from lueur.models import AWSMeta, Resource
 from lueur.platform.aws.client import Client
 
 __all__ = ["explore_eks"]
@@ -43,10 +43,12 @@ def explore_clusters(region: str) -> list[Resource]:
             results.append(
                 Resource(
                     id=make_id(cluster["arn"]),
-                    meta=Meta(
+                    meta=AWSMeta(
                         name=cluster["name"],
                         display=cluster["name"],
                         kind="cluster",
+                        platform="aws",
+                        region=region,
                     ),
                     struct=cluster,
                 )
@@ -69,7 +71,13 @@ def explore_nodegroups(region: str, cluster_name: str) -> list[Resource]:
             results.append(
                 Resource(
                     id=make_id(ng["nodegroup"]["nodegroupArn"]),
-                    meta=Meta(name=ngname, display=ngname, kind="nodegroup"),
+                    meta=AWSMeta(
+                        name=ngname,
+                        display=ngname,
+                        kind="nodegroup",
+                        platform="aws",
+                        region=region,
+                    ),
                     struct=ng,
                 )
             )

@@ -1,10 +1,14 @@
 # mypy: disable-error-code="call-arg,index"
+from typing import Any
+
 import msgspec
 from kubernetes import client
 
+from lueur.links import add_link
 from lueur.make_id import make_id
-from lueur.models import Meta, Resource
+from lueur.models import Discovery, K8SMeta, Link, Resource
 from lueur.platform.k8s.client import AsyncClient, Client
+from lueur.rules import iter_resource
 
 __all__ = ["explore_gateway"]
 
@@ -67,10 +71,12 @@ async def explore_namespaced_gateways(
         results.append(
             Resource(
                 id=make_id(meta["uid"]),
-                meta=Meta(
+                meta=K8SMeta(
                     name=f"{spec['gatewayClassName']}/{meta['name']}",
                     display=meta["name"],
-                    kind="k8s/gateway",
+                    kind="gateway",
+                    platform="k8s",
+                    ns=meta["namespace"],
                 ),
                 struct=gw,
             )
@@ -102,13 +108,53 @@ async def explore_namespaced_http_routes(
         results.append(
             Resource(
                 id=make_id(meta["uid"]),
-                meta=Meta(
+                meta=K8SMeta(
                     name=f"{meta['namespace']}/{meta['name']}",
                     display=meta["name"],
-                    kind="k8s/httproute",
+                    kind="httproute",
+                    platform="k8s",
+                    ns=meta["namespace"],
                 ),
                 struct=route,
             )
         )
 
     return results
+
+
+def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
+    for annotation in iter_resource(
+        serialized,
+        "$.resources[?@.meta.kind=='gateway'].struct.metadata.annotations['networking.gke.io/backend-services']",  # noqa E501
+    ):
+        # backend_services = [bs.strip() for bs in annotation.split(",")]
+
+        r_id = annotation.parent.parent.obj["id"]  # type: ignore
+        name = annotation.value.rsplit("/", 1)[-1]  # type: ignore
+        p = f"$.resources[?@.meta.kind=='service' && @.struct.cloudRun.serviceName=='{name}']"  # noqa E501
+        for svc in iter_resource(serialized, p):
+            add_link(
+                d,
+                r_id,
+                Link(
+                    direction="out",
+                    kind="service",
+                    path=svc.path,
+                    pointer=str(svc.pointer()),
+                ),
+            )
+
+            svc_name = svc.obj["meta"]["name"]  # type: ignore
+
+            p = f"$.resources[?@.meta.kind=='slo' && match(@.meta.name, '{svc_name}/serviceLevelObjectives/.*')]"  # noqa E501
+            for slo in iter_resource(serialized, p):
+                add_link(
+                    d,
+                    r_id,
+                    Link(
+                        direction="out",
+                        kind="slo",
+                        path=slo.path,
+                        pointer=str(slo.pointer()),
+                    ),
+                )

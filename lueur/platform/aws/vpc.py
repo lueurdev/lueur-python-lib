@@ -4,7 +4,7 @@ from typing import Any
 
 from lueur.links import add_link
 from lueur.make_id import make_id
-from lueur.models import Discovery, Link, Meta, Resource
+from lueur.models import AWSMeta, Discovery, Link, Resource
 from lueur.platform.aws.client import Client
 from lueur.rules import iter_resource
 
@@ -46,8 +46,12 @@ def explore_vpcs(region: str) -> list[Resource]:
             results.append(
                 Resource(
                     id=make_id(vpc["VpcId"]),
-                    meta=Meta(
-                        name=vpc["VpcId"], display=vpc["VpcId"], kind="vpc"
+                    meta=AWSMeta(
+                        name=vpc["VpcId"],
+                        display=vpc["VpcId"],
+                        kind="vpc",
+                        platform="aws",
+                        region=region,
                     ),
                     struct=vpc,
                 )
@@ -74,10 +78,12 @@ def explore_subnets(region: str, vpc_id: str) -> list[Resource]:
         results.append(
             Resource(
                 id=make_id(subnet["SubnetId"]),
-                meta=Meta(
+                meta=AWSMeta(
                     name=subnet["SubnetId"],
                     display=subnet["SubnetId"],
                     kind="subnet",
+                    platform="aws",
+                    region=region,
                 ),
                 struct=subnet,
             )

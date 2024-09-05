@@ -14,6 +14,8 @@ __all__ = [
     "Rule",
     "Rules",
     "GCPProject",
+    "K8SMeta",
+    "AWSMeta",
 ]
 
 
@@ -29,6 +31,7 @@ class Meta(BaseModel):
     display: str
     dt: datetime = Field(default_factory=now)
     kind: str
+    platform: str | None = None
 
 
 class GCPMeta(Meta):
@@ -36,6 +39,14 @@ class GCPMeta(Meta):
     region: str | None = None
     zone: str | None = None
     self_link: str | None = None
+
+
+class K8SMeta(Meta):
+    ns: str | None = None
+
+
+class AWSMeta(Meta):
+    region: str | None = None
 
 
 class Resource(BaseModel):

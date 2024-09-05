@@ -7,7 +7,7 @@ from google.oauth2._service_account_async import Credentials
 
 from lueur.links import add_link
 from lueur.make_id import make_id
-from lueur.models import Discovery, Link, Meta, Resource
+from lueur.models import Discovery, GCPMeta, Link, Resource
 from lueur.platform.gcp.client import AuthorizedSession, Client
 from lueur.rules import iter_resource
 
@@ -57,11 +57,18 @@ async def explore_instances(
 
     results = []
     for inst in instances["items"]:
+        self_link = inst.get("selfLink")
+
         results.append(
             Resource(
                 id=make_id(inst["selfLink"]),
-                meta=Meta(
-                    name=inst["name"], display=inst["name"], kind="instance"
+                meta=GCPMeta(
+                    name=inst["name"],
+                    display=inst["name"],
+                    kind="instance",
+                    platform="gcp",
+                    project=project,
+                    self_link=self_link,
                 ),
                 struct=inst,
             )
@@ -79,10 +86,19 @@ async def explore_users(
 
     results = []
     for user in users["items"]:
+        self_link = user.get("selfLink")
+
         results.append(
             Resource(
                 id=make_id(f"{user['instance']}-{user['name']}"),
-                meta=Meta(name=user["name"], display=user["name"], kind="user"),
+                meta=GCPMeta(
+                    name=user["name"],
+                    display=user["name"],
+                    kind="user",
+                    platform="gcp",
+                    project=project,
+                    self_link=self_link,
+                ),
                 struct=user,
             )
         )
@@ -101,13 +117,18 @@ async def explore_databases(
 
     results = []
     for database in databases["items"]:
+        self_link = database.get("selfLink")
+
         results.append(
             Resource(
                 id=make_id(f"{database['instance']}-{database['name']}"),
-                meta=Meta(
+                meta=GCPMeta(
                     name=database["name"],
                     display=database["name"],
                     kind="database",
+                    platform="gcp",
+                    project=project,
+                    self_link=self_link,
                 ),
                 struct=database,
             )

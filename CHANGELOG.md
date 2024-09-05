@@ -7,6 +7,7 @@
 ### Changed
 
 -   Bump dependencies
+-   Extend each platform metadata
 
 ## [0.3.1][] - 2024-07-16
 

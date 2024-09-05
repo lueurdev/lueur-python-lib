@@ -1,5 +1,5 @@
 from lueur.make_id import make_id
-from lueur.models import Meta, Resource
+from lueur.models import AWSMeta, Resource
 from lueur.platform.aws.client import Client
 
 __all__ = ["explore_ec2"]
@@ -28,10 +28,12 @@ def explore_instances(region: str) -> list[Resource]:
                 results.append(
                     Resource(
                         id=make_id(instance["InstanceId"]),
-                        meta=Meta(
+                        meta=AWSMeta(
                             name=instance["InstanceId"],
                             display=instance["InstanceId"],
                             kind="instance",
+                            platform="aws",
+                            region=region,
                         ),
                         struct=instance,
                     )

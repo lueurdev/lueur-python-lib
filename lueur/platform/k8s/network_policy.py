@@ -3,7 +3,7 @@ import msgspec
 from kubernetes import client
 
 from lueur.make_id import make_id
-from lueur.models import Meta, Resource
+from lueur.models import K8SMeta, Resource
 from lueur.platform.k8s.client import AsyncClient, Client
 
 __all__ = ["explore_network_policy"]
@@ -33,10 +33,12 @@ async def explore_network_policies(c: AsyncClient) -> list[Resource]:
         results.append(
             Resource(
                 id=make_id(meta["uid"]),
-                meta=Meta(
+                meta=K8SMeta(
                     name=meta["name"],
                     display=meta["name"],
-                    kind="k8s/network-policy",
+                    kind="network-policy",
+                    platform="k8s",
+                    namespace=meta.get("namespace"),
                 ),
                 struct=policy,
             )

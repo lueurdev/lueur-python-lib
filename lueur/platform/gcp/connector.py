@@ -57,6 +57,7 @@ async def explore_connector_providers(
     for provider in providers.get("providers", []):
         name = provider["name"]
         display = provider["displayName"]
+        self_link = provider.get("selfLink")
 
         results.append(
             Resource(
@@ -67,6 +68,8 @@ async def explore_connector_providers(
                     kind="connector-provider",
                     project=project,
                     region=location,
+                    platform="k8s",
+                    self_link=self_link,
                 ),
                 struct=provider,
             )
@@ -88,6 +91,7 @@ async def explore_connectors(
     for connector in connectors.get("connectors", []):
         name = connector["name"]
         display = connector["displayName"]
+        self_link = connector.get("selfLink")
 
         results.append(
             Resource(
@@ -98,6 +102,8 @@ async def explore_connectors(
                     kind="connector",
                     project=project,
                     region=location,
+                    platform="gcp",
+                    self_link=self_link,
                 ),
                 struct=connector,
             )
@@ -119,6 +125,7 @@ async def explore_connections(
     for connection in connections.get("connections", []):
         name = connection["name"]
         display = connection["name"]
+        self_link = connection.get("selfLink")
 
         results.append(
             Resource(
@@ -129,6 +136,8 @@ async def explore_connections(
                     kind="connector-connection",
                     project=project,
                     region=location,
+                    platform="gcp",
+                    self_link=self_link,
                 ),
                 struct=connection,
             )

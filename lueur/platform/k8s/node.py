@@ -6,7 +6,7 @@ from kubernetes import client
 
 from lueur.links import add_link
 from lueur.make_id import make_id
-from lueur.models import Discovery, Link, Meta, Resource
+from lueur.models import Discovery, K8SMeta, Link, Resource
 from lueur.platform.k8s.client import AsyncClient, Client
 from lueur.rules import iter_resource
 
@@ -37,8 +37,11 @@ async def explore_nodes(c: AsyncClient) -> list[Resource]:
         results.append(
             Resource(
                 id=make_id(meta["uid"]),
-                meta=Meta(
-                    name=meta["name"], display=meta["name"], kind="k8s/node"
+                meta=K8SMeta(
+                    name=meta["name"],
+                    display=meta["name"],
+                    kind="node",
+                    platform="k8s",
                 ),
                 struct=node,
             )
@@ -53,14 +56,14 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
     ):
         r_id = np.parent.parent.obj["id"]
         name = np.value
-        p = f"$.resources[?@.meta.kind=='k8s/node' && @.struct.metadata.labels.['cloud.google.com/gke-nodepool']=='{name}']"  # noqa E501
+        p = f"$.resources[?@.meta.kind=='node' && @.struct.metadata.labels.['cloud.google.com/gke-nodepool']=='{name}']"  # noqa E501
         for k8snode in iter_resource(serialized, p):
             add_link(
                 d,
                 r_id,
                 Link(
                     direction="out",
-                    kind="k8s/node",
+                    kind="node",
                     path=k8snode.path,
                     pointer=str(k8snode.pointer()),
                 ),

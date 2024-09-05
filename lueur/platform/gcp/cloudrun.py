@@ -45,6 +45,7 @@ async def explore_services(
     for svc in services.get("services", []):
         name = svc["name"]
         display = name.rsplit("/", 1)[-1]
+        self_link = svc.get("selfLink")
 
         results.append(
             Resource(
@@ -55,6 +56,8 @@ async def explore_services(
                     kind="cloudrun",
                     project=project,
                     region=location,
+                    platform="gcp",
+                    self_link=self_link,
                 ),
                 struct=svc,
             )
@@ -76,6 +79,7 @@ async def explore_vpcaccess_connectors(
     for connector in connectors["connectors"]:
         name = connector["name"]
         display = name.rsplit("/", 1)[-1]
+        self_link = connector.get("selfLink")
 
         results.append(
             Resource(
@@ -86,6 +90,8 @@ async def explore_vpcaccess_connectors(
                     kind="cloudrun-vpcaccess-connector",
                     project=project,
                     region=location,
+                    platform="gcp",
+                    self_link=self_link,
                 ),
                 struct=connector,
             )
