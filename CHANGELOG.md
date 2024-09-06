@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.5.1..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.6.0..HEAD
+
+## [0.6.0][] - 2024-09-06
+
+[0.6.0]: https://github.com/lueurdev/lueur/compare/0.5.1..0.6.0
+
+### Added
+
+-   Kubernetes expand_links
 
 ## [0.5.1][] - 2024-09-06
 
