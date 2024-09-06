@@ -59,7 +59,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
         r_id = rs.parent.parent.obj["id"]  # type: ignore
         name = rs.value
 
-        p = f"$.resources[?@.meta.kind=='pod' && @.struct.metadata.ownerReferences.*.kind=='ReplicaSet' && @.struct.metadata.ownerReferences.*.name=='{name}]"  # noqa E501
+        p = f"$.resources[?@.meta.kind=='pod'].struct.metadata.ownerReferences[?@.kind=='ReplicaSet' && @.name=='{name}']"  # noqa E501
         for pod in iter_resource(serialized, p):
             add_link(
                 d,

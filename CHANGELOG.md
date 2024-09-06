@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.5.0..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.5.1..HEAD
+
+## [0.5.1][] - 2024-09-06
+
+[0.5.1]: https://github.com/lueurdev/lueur/compare/0.5.0..0.5.1
+
+### Fixed
+
+-   ReplicaSet and Deployment links queries
 
 ## [0.5.0][] - 2024-09-06
 
