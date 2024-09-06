@@ -9,6 +9,7 @@ from lueur.platform.k8s.ingress import explore_ingress
 from lueur.platform.k8s.network_policy import explore_network_policy
 from lueur.platform.k8s.node import explore_node
 from lueur.platform.k8s.pod import explore_pod
+from lueur.platform.k8s.replicaset import explore_replicaset
 from lueur.platform.k8s.service import explore_service
 
 __all__ = ["explore"]
@@ -21,11 +22,12 @@ async def explore() -> Discovery:
     async with asyncio.TaskGroup() as tg:
         tasks.append(tg.create_task(explore_node()))
         tasks.append(tg.create_task(explore_pod()))
+        tasks.append(tg.create_task(explore_replicaset()))
+        tasks.append(tg.create_task(explore_deployment()))
         tasks.append(tg.create_task(explore_ingress()))
         tasks.append(tg.create_task(explore_service()))
         tasks.append(tg.create_task(explore_network_policy()))
         tasks.append(tg.create_task(explore_gateway()))
-        tasks.append(tg.create_task(explore_deployment()))
 
     for task in tasks:
         result = task.result()

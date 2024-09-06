@@ -127,8 +127,6 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
         serialized,
         "$.resources[?@.meta.kind=='gateway'].struct.metadata.annotations['networking.gke.io/backend-services']",  # noqa E501
     ):
-        # backend_services = [bs.strip() for bs in annotation.split(",")]
-
         r_id = annotation.parent.parent.obj["id"]  # type: ignore
         name = annotation.value.rsplit("/", 1)[-1]  # type: ignore
         p = f"$.resources[?@.meta.kind=='service' && @.struct.cloudRun.serviceName=='{name}']"  # noqa E501
@@ -158,3 +156,23 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                         pointer=str(slo.pointer()),
                     ),
                 )
+
+    for urlmap in iter_resource(
+        serialized,
+        "$.resources[?@.meta.kind=='gateway'].struct.metadata.annotations['networking.gke.io/url-maps']",  # noqa E501
+    ):
+        r_id = annotation.parent.parent.obj["id"]  # type: ignore
+        name = annotation.value.rsplit("/", 1)[-1]  # type: ignore
+
+        p = f"$.resources[?@.meta.kind=='global-urlmap' && @.meta.name=='{name}']"  # noqa E501
+        for urlmap in iter_resource(serialized, p):
+            add_link(
+                d,
+                r_id,
+                Link(
+                    direction="out",
+                    kind="global-urlmap",
+                    path=urlmap.path,
+                    pointer=str(urlmap.pointer()),
+                ),
+            )

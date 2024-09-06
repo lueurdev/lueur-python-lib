@@ -39,6 +39,7 @@ class GCPMeta(Meta):
     region: str | None = None
     zone: str | None = None
     self_link: str | None = None
+    regional: bool = False
 
 
 class K8SMeta(Meta):
