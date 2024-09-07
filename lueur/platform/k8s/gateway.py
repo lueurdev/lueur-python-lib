@@ -161,8 +161,8 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
         serialized,
         "$.resources[?@.meta.kind=='gateway'].struct.metadata.annotations['networking.gke.io/url-maps']",  # noqa E501
     ):
-        r_id = annotation.parent.parent.obj["id"]  # type: ignore
-        name = annotation.value.rsplit("/", 1)[-1]  # type: ignore
+        r_id = urlmap.parent.parent.parent.parent.obj["id"]  # type: ignore
+        name = urlmap.value.rsplit("/", 1)[-1]  # type: ignore
 
         p = f"$.resources[?@.meta.kind=='global-urlmap' && @.meta.name=='{name}']"  # noqa E501
         for urlmap in iter_resource(serialized, p):

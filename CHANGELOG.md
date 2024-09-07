@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.6.0..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.6.1..HEAD
+
+## [0.6.1][] - 2024-09-07
+
+[0.6.1]: https://github.com/lueurdev/lueur/compare/0.6.0..0.6.1
+
+### Fixed
+
+-   Fix the gateway link path to urlmaps
 
 ## [0.6.0][] - 2024-09-06
 
