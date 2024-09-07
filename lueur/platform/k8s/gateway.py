@@ -127,8 +127,9 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
         serialized,
         "$.resources[?@.meta.kind=='gateway'].struct.metadata.annotations['networking.gke.io/backend-services']",  # noqa E501
     ):
-        r_id = annotation.parent.parent.obj["id"]  # type: ignore
+        r_id = annotation.parent.parent.parent.parent.obj["id"]  # type: ignore
         name = annotation.value.rsplit("/", 1)[-1]  # type: ignore
+
         p = f"$.resources[?@.meta.kind=='service' && @.struct.cloudRun.serviceName=='{name}']"  # noqa E501
         for svc in iter_resource(serialized, p):
             add_link(

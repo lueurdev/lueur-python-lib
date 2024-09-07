@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.6.1..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.6.2..HEAD
+
+## [0.6.2][] - 2024-09-07
+
+[0.6.2]: https://github.com/lueurdev/lueur/compare/0.6.1..0.6.2
+
+### Fixed
+
+-   Fix the gateway link path to cloudruns
 
 ## [0.6.1][] - 2024-09-07
 
