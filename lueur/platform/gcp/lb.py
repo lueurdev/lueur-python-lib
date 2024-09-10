@@ -85,6 +85,7 @@ async def explore_global_urlmaps(
                     kind="global-urlmap",
                     project=project,
                     platform="gcp",
+                    category="loadbalancer",
                 ),
                 struct=urlmap,
             )
@@ -119,6 +120,7 @@ async def explore_global_backend_services(
                     project=project,
                     platform="gcp",
                     self_link=self_link,
+                    category="loadbalancer",
                 ),
                 struct=backend_service,
             )
@@ -159,6 +161,7 @@ async def explore_global_backend_groups(
                     zone=zone,
                     platform="gcp",
                     self_link=self_link,
+                    category="loadbalancer",
                 ),
                 struct=backend_group,
             )
@@ -192,6 +195,7 @@ async def explore_regional_urlmaps(
                     region=location,
                     platform="gcp",
                     self_link=self_link,
+                    category="loadbalancer",
                 ),
                 struct=urlmap,
             )
@@ -228,6 +232,7 @@ async def explore_regional_backend_services(
                     region=region,
                     platform="gcp",
                     self_link=self_link,
+                    category="loadbalancer",
                 ),
                 struct=backend_service,
             )
@@ -268,6 +273,7 @@ async def explore_regional_backend_groups(
                     zone=zone,
                     platform="gcp",
                     self_link=self_link,
+                    category="loadbalancer",
                 ),
                 struct=backend_group,
             )
@@ -322,6 +328,7 @@ async def explore_zonal_backend_groups(
                         zone=zone,
                         platform="gcp",
                         self_link=self_link,
+                        category="loadbalancer",
                     ),
                     struct=backend_group,
                 )
@@ -562,3 +569,23 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                                 pointer=str(slo.pointer()),
                             ),
                         )
+
+    for urlmap in iter_resource(
+        serialized,
+        "$.resources[?@.meta.kind=='gateway'].struct.metadata.annotations['networking.gke.io/url-maps']",  # noqa E501
+    ):
+        r_id = urlmap.parent.parent.parent.parent.obj["id"]  # type: ignore
+        name = urlmap.value.rsplit("/", 1)[-1]  # type: ignore
+
+        p = f"$.resources[?@.meta.kind=='global-urlmap' && @.meta.name=='{name}']"  # noqa E501
+        for urlmap in iter_resource(serialized, p):
+            add_link(
+                d,
+                r_id,
+                Link(
+                    direction="out",
+                    kind="global-urlmap",
+                    path=urlmap.path,
+                    pointer=str(urlmap.pointer()),
+                ),
+            )

@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.6.2..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.7.0..HEAD
+
+## [0.7.0][] - 2024-09-10
+
+[0.7.0]: https://github.com/lueurdev/lueur/compare/0.6.2..0.7.0
+
+### Added
+
+-   The category field in the meta
 
 ## [0.6.2][] - 2024-09-07
 

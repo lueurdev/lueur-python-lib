@@ -163,7 +163,7 @@ async def explore(
     return Discovery(
         id=make_id(name),
         resources=resources,
-        meta=Meta(name=name, display=name, kind="gcp"),
+        meta=Meta(name=name, display=name, kind="gcp", category=None),
     )
 
 

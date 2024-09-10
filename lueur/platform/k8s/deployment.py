@@ -43,6 +43,7 @@ async def explore_deployments(c: AsyncClient) -> list[Resource]:
                     kind="deployment",
                     platform="k8s",
                     ns=meta["namespace"],
+                    category="compute",
                 ),
                 struct=deployment,
             )

@@ -43,6 +43,7 @@ async def explore_replicasets(c: AsyncClient) -> list[Resource]:
                     kind="replicaset",
                     platform="k8s",
                     ns=meta["namespace"],
+                    category="compute",
                 ),
                 struct=rs,
             )

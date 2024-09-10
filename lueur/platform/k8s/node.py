@@ -42,6 +42,7 @@ async def explore_nodes(c: AsyncClient) -> list[Resource]:
                     display=meta["name"],
                     kind="node",
                     platform="k8s",
+                    category="compute",
                 ),
                 struct=node,
             )

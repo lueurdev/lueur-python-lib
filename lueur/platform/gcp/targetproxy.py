@@ -84,6 +84,7 @@ async def explore_global_http_target_proxies(
                     project=project,
                     self_link=self_link,
                     platform="gcp",
+                    category="service",
                 ),
                 struct=proxy,
             )
@@ -118,6 +119,7 @@ async def explore_regional_http_target_proxies(
                     region=location,
                     self_link=self_link,
                     platform="gcp",
+                    category="service",
                 ),
                 struct=proxy,
             )
@@ -151,6 +153,7 @@ async def explore_global_https_target_proxies(
                     project=project,
                     self_link=self_link,
                     platform="gcp",
+                    category="service",
                 ),
                 struct=proxy,
             )
@@ -185,6 +188,7 @@ async def explore_regional_https_target_proxies(
                     region=location,
                     self_link=self_link,
                     platform="gcp",
+                    category="service",
                 ),
                 struct=proxy,
             )

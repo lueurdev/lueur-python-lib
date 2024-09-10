@@ -52,6 +52,7 @@ def explore_vpcs(region: str) -> list[Resource]:
                         kind="vpc",
                         platform="aws",
                         region=region,
+                        category="network",
                     ),
                     struct=vpc,
                 )
@@ -84,6 +85,7 @@ def explore_subnets(region: str, vpc_id: str) -> list[Resource]:
                     kind="subnet",
                     platform="aws",
                     region=region,
+                    category="network",
                 ),
                 struct=subnet,
             )

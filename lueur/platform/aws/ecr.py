@@ -53,6 +53,7 @@ def explore_repositories(region: str) -> list[Resource]:
                         kind="repository",
                         platform="aws",
                         region=region,
+                        category="compute",
                     ),
                     struct=repository,
                 )
@@ -81,6 +82,7 @@ def explore_images(
                     kind="image",
                     platform="aws",
                     region=region,
+                    category="storage",
                 ),
                 struct=image,
             )

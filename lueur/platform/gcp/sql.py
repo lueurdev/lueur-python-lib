@@ -69,6 +69,7 @@ async def explore_instances(
                     platform="gcp",
                     project=project,
                     self_link=self_link,
+                    category="storage",
                 ),
                 struct=inst,
             )
@@ -98,6 +99,7 @@ async def explore_users(
                     platform="gcp",
                     project=project,
                     self_link=self_link,
+                    category="storage",
                 ),
                 struct=user,
             )
@@ -129,6 +131,7 @@ async def explore_databases(
                     platform="gcp",
                     project=project,
                     self_link=self_link,
+                    category="storage",
                 ),
                 struct=database,
             )

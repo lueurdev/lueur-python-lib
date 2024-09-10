@@ -48,7 +48,7 @@ def explore(region: str | None = None) -> Discovery:
     return Discovery(
         id=make_id(name),
         resources=resources,
-        meta=Meta(name=name, display=name, kind="aws"),
+        meta=Meta(name=name, display=name, kind="aws", category=None),
     )
 
 

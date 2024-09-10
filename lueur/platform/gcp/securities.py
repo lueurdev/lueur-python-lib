@@ -53,6 +53,7 @@ async def explore_global_securities(
                     project=project,
                     self_link=self_link,
                     platform="gcp",
+                    category="security",
                 ),
                 struct=security,
             )
@@ -87,6 +88,7 @@ async def explore_regional_securities(
                     self_link=self_link,
                     region=location,
                     platform="gcp",
+                    category="security",
                 ),
                 struct=security,
             )

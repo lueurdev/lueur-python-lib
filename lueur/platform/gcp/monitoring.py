@@ -75,6 +75,7 @@ async def explore_services(
                     project=project,
                     platform="gcp",
                     self_link=self_link,
+                    category="observability",
                 ),
                 struct=svc,
             )
@@ -112,6 +113,7 @@ async def explore_slos(
                     project=project,
                     platform="gcp",
                     self_link=self_link,
+                    category="observability",
                 ),
                 struct=slo,
             )
@@ -143,6 +145,7 @@ async def explore_alert_policies(
                     project=project,
                     platform="gcp",
                     self_link=self_link,
+                    category="observability",
                 ),
                 struct=nc,
             )
@@ -174,6 +177,7 @@ async def explore_notification_channels(
                     project=project,
                     platform="gcp",
                     self_link=self_link,
+                    category="observability",
                 ),
                 struct=nc,
             )
@@ -203,6 +207,7 @@ async def explore_groups(c: AuthorizedSession, project: str) -> list[Resource]:
                     project=project,
                     platform="gcp",
                     self_link=self_link,
+                    category="observability",
                 ),
                 struct=g,
             )
@@ -234,6 +239,7 @@ async def explore_incidents(
                     project=project,
                     platform="gcp",
                     self_link=self_link,
+                    category="observability",
                 ),
                 struct=g,
             )

@@ -39,6 +39,7 @@ async def explore_network_policies(c: AsyncClient) -> list[Resource]:
                     kind="network-policy",
                     platform="k8s",
                     namespace=meta.get("namespace"),
+                    category="security",
                 ),
                 struct=policy,
             )

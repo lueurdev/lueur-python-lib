@@ -52,6 +52,7 @@ async def explore_global_addresses(
                     project=project,
                     self_link=self_link,
                     platform="gcp",
+                    category="loadbalancer",
                 ),
                 struct=address,
             )
@@ -86,6 +87,7 @@ async def explore_regional_addresses(
                     region=location,
                     self_link=self_link,
                     platform="gcp",
+                    category="loadbalancer",
                 ),
                 struct=address,
             )

@@ -56,6 +56,7 @@ def explore_load_balancers(region: str) -> list[Resource]:
                         kind="loadbalancer",
                         platform="aws",
                         region=region,
+                        category="loadbalancer",
                     ),
                     struct=lb,
                 )
@@ -81,6 +82,7 @@ def explore_target_groups(region: str, lb_name: str) -> list[Resource]:
                     kind="target-group",
                     platform="aws",
                     region=region,
+                    category="loadbalancer",
                 ),
                 struct=tg,
             )
@@ -106,6 +108,7 @@ def explore_listeners(region: str, lb_name: str) -> list[Resource]:
                     kind="listener",
                     platform="aws",
                     region=region,
+                    category="loadbalancer",
                 ),
                 struct=listener,
             )
@@ -133,6 +136,7 @@ def explore_rules(region: str, listener_arn: str) -> list[Resource]:
                     kind="listener-rule",
                     platform="aws",
                     region=region,
+                    category="loadbalancer",
                 ),
                 struct=rule,
             )

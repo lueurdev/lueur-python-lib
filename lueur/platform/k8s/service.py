@@ -39,6 +39,7 @@ async def explore_services(c: AsyncClient) -> list[Resource]:
                     kind="service",
                     platform="k8s",
                     ns=meta["namespace"],
+                    category="service",
                 ),
                 struct=service,
             )

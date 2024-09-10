@@ -32,6 +32,20 @@ class Meta(BaseModel):
     dt: datetime = Field(default_factory=now)
     kind: str
     platform: str | None = None
+    category: (
+        Literal[
+            "network",
+            "service",
+            "observability",
+            "storage",
+            "compute",
+            "security",
+            "loadbalancer",
+            "application",
+            "integration",
+        ]
+        | None
+    )
 
 
 class GCPMeta(Meta):

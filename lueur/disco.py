@@ -24,6 +24,7 @@ def merge_discoveries(
             name=name,
             display=f"Snaphot {datetime.now(timezone.utc)}",
             kind="mixed",
+            category=None,
         ),
     )
 

@@ -39,6 +39,7 @@ async def explore_ingresses(c: AsyncClient) -> list[Resource]:
                     kind="ingress",
                     platform="k8s",
                     ns=meta["namespace"],
+                    category="loadbalancer",
                 ),
                 struct=ingress,
             )

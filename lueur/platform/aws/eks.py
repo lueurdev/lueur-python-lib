@@ -49,6 +49,7 @@ def explore_clusters(region: str) -> list[Resource]:
                         kind="cluster",
                         platform="aws",
                         region=region,
+                        category="compute",
                     ),
                     struct=cluster,
                 )
@@ -77,6 +78,7 @@ def explore_nodegroups(region: str, cluster_name: str) -> list[Resource]:
                         kind="nodegroup",
                         platform="aws",
                         region=region,
+                        category="compute",
                     ),
                     struct=ng,
                 )

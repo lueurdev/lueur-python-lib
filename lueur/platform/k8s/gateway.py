@@ -77,6 +77,7 @@ async def explore_namespaced_gateways(
                     kind="gateway",
                     platform="k8s",
                     ns=meta["namespace"],
+                    category="loadbalancer",
                 ),
                 struct=gw,
             )
@@ -114,6 +115,7 @@ async def explore_namespaced_http_routes(
                     kind="httproute",
                     platform="k8s",
                     ns=meta["namespace"],
+                    category="loadbalancer",
                 ),
                 struct=route,
             )

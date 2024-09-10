@@ -34,6 +34,7 @@ def explore_instances(region: str) -> list[Resource]:
                             kind="instance",
                             platform="aws",
                             region=region,
+                            category="compute",
                         ),
                         struct=instance,
                     )

@@ -49,7 +49,7 @@ async def explore() -> Discovery:
     return Discovery(
         id=make_id(name),
         resources=resources,
-        meta=Meta(name=name, display="Kubernetes", kind="k8s"),
+        meta=Meta(name=name, display="Kubernetes", kind="k8s", category=None),
     )
 
 

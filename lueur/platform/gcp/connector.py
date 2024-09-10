@@ -70,6 +70,7 @@ async def explore_connector_providers(
                     region=location,
                     platform="k8s",
                     self_link=self_link,
+                    category="integration",
                 ),
                 struct=provider,
             )
@@ -104,6 +105,7 @@ async def explore_connectors(
                     region=location,
                     platform="gcp",
                     self_link=self_link,
+                    category="integration",
                 ),
                 struct=connector,
             )
@@ -138,6 +140,7 @@ async def explore_connections(
                     region=location,
                     platform="gcp",
                     self_link=self_link,
+                    category="integration",
                 ),
                 struct=connection,
             )

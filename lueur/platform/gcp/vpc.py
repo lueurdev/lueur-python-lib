@@ -68,6 +68,7 @@ async def explore_global_networks(
                     project=project,
                     self_link=self_link,
                     platform="gcp",
+                    category="network",
                 ),
                 struct=net,
             )
@@ -97,6 +98,7 @@ async def explore_subnet(
             project=project,
             self_link=self_link,
             platform="gcp",
+            category="network",
         ),
         struct=sub,
     )

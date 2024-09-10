@@ -47,6 +47,7 @@ async def explore_global_firewalls(
                     project=project,
                     self_link=self_link,
                     platform="gcp",
+                    category="security",
                 ),
                 struct=firewall,
             )
