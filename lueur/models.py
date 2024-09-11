@@ -35,13 +35,11 @@ class Meta(BaseModel):
     category: (
         Literal[
             "network",
-            "service",
             "observability",
             "storage",
             "compute",
             "security",
             "loadbalancer",
-            "application",
             "integration",
         ]
         | None

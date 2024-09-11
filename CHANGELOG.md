@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.7.0..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.8.0..HEAD
+
+## [0.8.0][] - 2024-09-11
+
+[0.8.0]: https://github.com/lueurdev/lueur/compare/0.7.0..0.8.0
+
+### Changed
+
+-   The `application` and `service` categories as they were poorly defined
 
 ## [0.7.0][] - 2024-09-10
 

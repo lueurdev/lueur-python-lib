@@ -53,7 +53,7 @@ async def explore_global_healthchecks(
                     project=project,
                     self_link=self_link,
                     platform="gcp",
-                    category="service",
+                    category="observability",
                 ),
                 struct=hc,
             )
@@ -88,7 +88,7 @@ async def explore_regional_healthchecks(
                     self_link=self_link,
                     region=location,
                     platform="gcp",
-                    category="service",
+                    category="observability",
                 ),
                 struct=hc,
             )

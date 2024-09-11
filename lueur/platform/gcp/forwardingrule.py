@@ -53,7 +53,7 @@ async def explore_global_forwardingrules(
                     project=project,
                     self_link=self_link,
                     platform="gcp",
-                    category="service",
+                    category="network",
                 ),
                 struct=rule,
             )
@@ -88,7 +88,7 @@ async def explore_regional_forwardingrules(
                     self_link=self_link,
                     region=location,
                     platform="gcp",
-                    category="service",
+                    category="network",
                 ),
                 struct=rule,
             )

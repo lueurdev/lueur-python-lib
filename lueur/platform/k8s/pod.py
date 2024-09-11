@@ -39,7 +39,7 @@ async def explore_pods(c: AsyncClient) -> list[Resource]:
                     kind="pod",
                     platform="k8s",
                     ns=meta["namespace"],
-                    category="application",
+                    category="compute",
                 ),
                 struct=pod,
             )

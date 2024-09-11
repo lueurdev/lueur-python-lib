@@ -58,7 +58,7 @@ async def explore_services(
                     region=location,
                     platform="gcp",
                     self_link=self_link,
-                    category="service",
+                    category="compute",
                 ),
                 struct=svc,
             )
@@ -93,7 +93,7 @@ async def explore_vpcaccess_connectors(
                     region=location,
                     platform="gcp",
                     self_link=self_link,
-                    category="service",
+                    category="network",
                 ),
                 struct=connector,
             )
