@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.8.0..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.8.1..HEAD
+
+## [0.8.1][] - 2024-09-12
+
+[0.8.1]: https://github.com/lueurdev/lueur/compare/0.8.0..0.8.1
+
+### Fixed
+
+-   Point to resource object to get path and pointer
 
 ## [0.8.0][] - 2024-09-11
 
