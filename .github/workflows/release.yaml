@@ -28,7 +28,7 @@ jobs:
     - name: Publish package distributions to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
     - name: Upload packages as artifacts
-      uses: actions/upload-artifact@v2-preview
+      uses: actions/upload-artifact@v4
       with:
         name: lueur-packages
         path: dist/lueur*
@@ -51,7 +51,7 @@ jobs:
       - release-to-pypi
     steps:
       - name: Download pypi artifacts
-        uses: actions/download-artifact@v2-preview
+        uses: actions/download-artifact@v4
         with:
           name: lueur-packages
           path: dist

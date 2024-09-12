@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.8.1..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.8.2..HEAD
+
+## [0.8.2][] - 2024-09-12
+
+[0.8.2]: https://github.com/lueurdev/lueur/compare/0.8.1..0.8.2
+
+### Fixed
+
+-   Github action version for upload/download artifacts
 
 ## [0.8.1][] - 2024-09-12
 
