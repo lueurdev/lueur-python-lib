@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.8.3..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.9.0..HEAD
+
+## [0.9.0][] - 2024-09-25
+
+[0.9.0]: https://github.com/lueurdev/lueur/compare/0.8.3..0.9.0
+
+### Added
+
+-   memorystore, storage and compute basic support for GCP
 
 ## [0.8.3][] - 2024-09-12
 

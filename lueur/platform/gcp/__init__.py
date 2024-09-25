@@ -10,6 +10,7 @@ from lueur.models import Discovery, Meta
 from lueur.platform.gcp.address import explore_addresses
 from lueur.platform.gcp.cloudrun import expand_links as cloudrun_links
 from lueur.platform.gcp.cloudrun import explore_cloudrun
+from lueur.platform.gcp.compute import explore_compute
 from lueur.platform.gcp.connector import explore_connector
 from lueur.platform.gcp.firewall import explore_firewalls
 from lueur.platform.gcp.forwardingrule import explore_forwardingrules
@@ -18,11 +19,13 @@ from lueur.platform.gcp.gke import explore_gke
 from lueur.platform.gcp.healthchecks import explore_health_checks
 from lueur.platform.gcp.lb import expand_links as lb_expand_links
 from lueur.platform.gcp.lb import explore_lb
+from lueur.platform.gcp.memorystore import explore_memorystore
 from lueur.platform.gcp.monitoring import expand_links as mon_expand_links
 from lueur.platform.gcp.monitoring import explore_monitoring
 from lueur.platform.gcp.securities import explore_securities
 from lueur.platform.gcp.sql import expand_links as sql_expand_links
 from lueur.platform.gcp.sql import explore_sql
+from lueur.platform.gcp.storage import explore_storage
 from lueur.platform.gcp.targetproxy import explore_target_proxies
 from lueur.platform.gcp.vpc import expand_links as vpc_expand_links
 from lueur.platform.gcp.vpc import explore_vpc
@@ -147,6 +150,24 @@ async def explore(
                 tg.create_task(
                     explore_target_proxies(project, None, creds),
                     name="explore_target_proxies",
+                )
+            )
+            tasks.append(
+                tg.create_task(
+                    explore_storage(project, creds),
+                    name="explore_storage",
+                )
+            )
+            tasks.append(
+                tg.create_task(
+                    explore_compute(project, creds),
+                    name="explore_compute",
+                )
+            )
+            tasks.append(
+                tg.create_task(
+                    explore_memorystore(project, creds),
+                    name="explore_memorystore",
                 )
             )
 

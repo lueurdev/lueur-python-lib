@@ -41,6 +41,7 @@ class Meta(BaseModel):
             "security",
             "loadbalancer",
             "integration",
+            "memorystore"
         ]
         | None
     )
