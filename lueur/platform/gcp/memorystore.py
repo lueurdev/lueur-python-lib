@@ -1,4 +1,6 @@
 # mypy: disable-error-code="index,union-attr"
+import logging
+
 import msgspec
 from google.oauth2._service_account_async import Credentials
 
@@ -7,6 +9,7 @@ from lueur.models import GCPMeta, Resource
 from lueur.platform.gcp.client import AuthorizedSession, Client
 
 __all__ = ["explore_memorystore"]
+logger = logging.getLogger("lueur.lib")
 
 
 async def explore_memorystore(
@@ -30,6 +33,10 @@ async def explore_all_instances(
     response = await c.get(f"/v1/projects/{project}/locations/-/instances")
 
     stores = msgspec.json.decode(response.content)
+
+    if "instances" not in stores:
+        logger.warning(f"No memorystore instances found: {stores}")
+        return []
 
     results = []
     for store in stores["instances"]:

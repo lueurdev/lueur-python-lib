@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.9.3..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.9.4..HEAD
+
+## [0.9.4][] - 2024-09-25
+
+[0.9.4]: https://github.com/lueurdev/lueur/compare/0.9.3..0.9.4
+
+### Fixed
+
+-   Log when no memorystore instances were returned
 
 ## [0.9.3][] - 2024-09-25
 
