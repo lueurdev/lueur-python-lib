@@ -25,7 +25,9 @@ async def explore_storage(
 # Private functions
 ###############################################################################
 async def explore_buckets(c: AuthorizedSession, project: str) -> list[Resource]:
-    response = await c.get("/storage/v1/b")
+    response = await c.get(
+        "/storage/v1/b", params={"project": project}
+    )
 
     buckets = msgspec.json.decode(response.content)
 

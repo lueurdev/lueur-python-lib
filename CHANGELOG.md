@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.9.0..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.9.1..HEAD
+
+## [0.9.1][] - 2024-09-25
+
+[0.9.1]: https://github.com/lueurdev/lueur/compare/0.9.0..0.9.1
+
+### Fixed
+
+-   Add storage query parameter to request
 
 ## [0.9.0][] - 2024-09-25
 
