@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.9.1..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.9.2..HEAD
+
+## [0.9.2][] - 2024-09-25
+
+[0.9.2]: https://github.com/lueurdev/lueur/compare/0.9.1..0.9.2
+
+### Fixed
+
+-   Move task group result loop outside the context manager of the taskgroup
 
 ## [0.9.1][] - 2024-09-25
 

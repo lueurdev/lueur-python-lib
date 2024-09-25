@@ -43,11 +43,11 @@ async def explore_all_zones_instances(
                 tg.create_task(explore_zone_instances(c, project, zone))
             )
 
-        for task in tasks:
-            result = task.result()
-            if result is None:
-                continue
-            resources.extend(result)
+    for task in tasks:
+        result = task.result()
+        if result is None:
+            continue
+        resources.extend(result)
 
     return resources
 
