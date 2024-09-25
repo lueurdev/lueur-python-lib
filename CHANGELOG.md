@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.9.5..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.10.0..HEAD
+
+## [0.10.0][] - 2024-09-25
+
+[0.10.0]: https://github.com/lueurdev/lueur/compare/0.9.5..0.10.0
+
+### Changed
+
+-   Reworked some categories
 
 ## [0.9.5][] - 2024-09-25
 

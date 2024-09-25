@@ -41,7 +41,9 @@ class Meta(BaseModel):
             "security",
             "loadbalancer",
             "integration",
-            "memorystore"
+            "memorystore",
+            "sql",
+            "gke"
         ]
         | None
     )
