@@ -34,6 +34,10 @@ async def explore_all_instances(
 
     stores = msgspec.json.decode(response.content)
 
+    if response.status_code == 403:
+        logger.warning(f"Memorystore API access failure: {stores}")
+        return []
+
     if "instances" not in stores:
         logger.warning(f"No memorystore instances found: {stores}")
         return []

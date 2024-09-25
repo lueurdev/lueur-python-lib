@@ -65,9 +65,17 @@ async def explore_zone_instances(
 
     instances = msgspec.json.decode(response.content)
 
+    if response.status_code == 403:
+        logger.warning(f"Compute API access failure: {instances}")
+        return []
+
     if "warning" in instances:
         w = instances["warning"]
         logger.warning(f"Error when exploiring GCP instances: {w}")
+        return []
+
+    if "items" not in instances:
+        logger.warning(f"No compute instances found: {instances}")
         return []
 
     results = []

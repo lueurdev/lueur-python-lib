@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.9.4..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.9.5..HEAD
+
+## [0.9.5][] - 2024-09-25
+
+[0.9.5]: https://github.com/lueurdev/lueur/compare/0.9.4..0.9.5
+
+### Fixed
+
+-   Log when no compute instances were returned
 
 ## [0.9.4][] - 2024-09-25
 
