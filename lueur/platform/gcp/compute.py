@@ -1,5 +1,6 @@
 # mypy: disable-error-code="index,union-attr"
 import asyncio
+import logging
 
 import msgspec
 from google.oauth2._service_account_async import Credentials
@@ -10,6 +11,7 @@ from lueur.platform.gcp.client import AuthorizedSession, Client
 from lueur.platform.gcp.zone import list_project_zones
 
 __all__ = ["explore_compute"]
+logger = logging.getLogger("lueur.lib")
 
 
 async def explore_compute(
@@ -62,6 +64,11 @@ async def explore_zone_instances(
     )
 
     instances = msgspec.json.decode(response.content)
+
+    if "warning" in instances:
+        w = instances["warning"]
+        logger.warning(f"Error when exploiring GCP instances: {w}")
+        return []
 
     results = []
 

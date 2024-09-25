@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.9.2..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.9.3..HEAD
+
+## [0.9.3][] - 2024-09-25
+
+[0.9.3]: https://github.com/lueurdev/lueur/compare/0.9.2..0.9.3
+
+### Fixed
+
+-   Log when a warning is raised during listing instances
 
 ## [0.9.2][] - 2024-09-25
 
