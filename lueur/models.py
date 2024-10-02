@@ -43,7 +43,7 @@ class Meta(BaseModel):
             "integration",
             "memorystore",
             "sql",
-            "gke"
+            "gke",
         ]
         | None
     )

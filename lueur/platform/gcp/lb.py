@@ -1,5 +1,6 @@
 # mypy: disable-error-code="arg-type,attr-defined,index,union-attr"
 import asyncio
+import logging
 from typing import Any, cast
 
 import msgspec
@@ -13,6 +14,7 @@ from lueur.platform.gcp.zone import list_project_zones
 from lueur.rules import iter_resource
 
 __all__ = ["explore_lb"]
+logger = logging.getLogger("lueur.lib")
 
 
 async def explore_lb(
@@ -74,6 +76,14 @@ async def explore_global_urlmaps(
 
     urlmaps = msgspec.json.decode(response.content)
 
+    if response.status_code == 403:
+        logger.warning(f"URLMap API access failure: {urlmaps}")
+        return []
+
+    if "items" not in urlmaps:
+        logger.warning(f"No global urlmaps found: {urlmaps}")
+        return []
+
     results = []
     for urlmap in urlmaps.get("items", []):
         results.append(
@@ -103,6 +113,16 @@ async def explore_global_backend_services(
     )
 
     backend_services = msgspec.json.decode(response.content)
+
+    if response.status_code == 403:
+        logger.warning(
+            f"Backend services API access failure: {backend_services}"
+        )
+        return []
+
+    if "items" not in backend_services:
+        logger.warning(f"No global backend services found: {backend_services}")
+        return []
 
     results = []
     for backend_service in backend_services.get("items", []):
@@ -138,6 +158,14 @@ async def explore_global_backend_groups(
     )
 
     backend_groups = msgspec.json.decode(response.content)
+
+    if response.status_code == 403:
+        logger.warning(f"Backend groups API access failure: {backend_groups}")
+        return []
+
+    if "items" not in backend_groups:
+        logger.warning(f"No global backend groups found: {backend_groups}")
+        return []
 
     results = []
     for backend_group in backend_groups.get("items", []):
@@ -180,6 +208,14 @@ async def explore_regional_urlmaps(
 
     urlmaps = msgspec.json.decode(response.content)
 
+    if response.status_code == 403:
+        logger.warning(f"URLMap API access failure: {urlmaps}")
+        return []
+
+    if "items" not in urlmaps:
+        logger.warning(f"No regional urlmaps found: {urlmaps}")
+        return []
+
     results = []
     for urlmap in urlmaps.get("items", []):
         self_link = urlmap.get("selfLink")
@@ -213,6 +249,18 @@ async def explore_regional_backend_services(
     )
 
     backend_services = msgspec.json.decode(response.content)
+
+    if response.status_code == 403:
+        logger.warning(
+            f"Backend services API access failure: {backend_services}"
+        )
+        return []
+
+    if "items" not in backend_services:
+        logger.warning(
+            f"No regional backend services found: {backend_services}"
+        )
+        return []
 
     results = []
     for backend_service in backend_services.get("items", []):
@@ -250,6 +298,14 @@ async def explore_regional_backend_groups(
     )
 
     backend_groups = msgspec.json.decode(response.content)
+
+    if response.status_code == 403:
+        logger.warning(f"Backend groups API access failure: {backend_groups}")
+        return []
+
+    if "items" not in backend_groups:
+        logger.warning(f"No regional backend groups found: {backend_groups}")
+        return []
 
     results = []
 
@@ -304,9 +360,19 @@ async def explore_zonal_backend_groups(
     for task in tasks:
         response = task.result()
         if response is None:
-            response
+            continue
 
         backend_groups = msgspec.json.decode(response.content)
+
+        if response.status_code == 403:
+            logger.warning(
+                f"Zonal backend groups API access failure: {backend_groups}"
+            )
+            continue
+
+        if "items" not in backend_groups:
+            logger.warning(f"No zonal backend groups found: {backend_groups}")
+            continue
 
         for backend_group in backend_groups.get("items", []):
             name = backend_group["name"]

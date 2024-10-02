@@ -1,5 +1,6 @@
 # mypy: disable-error-code="union-attr"
 import asyncio
+import logging
 from typing import Any
 
 import msgspec
@@ -12,6 +13,7 @@ from lueur.platform.gcp.client import AuthorizedSession, Client
 from lueur.rules import iter_resource
 
 __all__ = ["explore_gke"]
+logger = logging.getLogger("lueur.lib")
 
 
 async def explore_gke(
@@ -54,6 +56,14 @@ async def explore_clusters(
 
     clusters = msgspec.json.decode(response.content)
 
+    if response.status_code == 403:
+        logger.warning(f"GKE API access failure: {clusters}")
+        return []
+
+    if "clusters" not in clusters:
+        logger.warning(f"No GKE databases found: {clusters}")
+        return []
+
     results = []
     for cl in clusters["clusters"]:
         self_link = cl.get("selfLink")
@@ -86,6 +96,14 @@ async def explore_nodepools(
     )
 
     node_pools = msgspec.json.decode(response.content)
+
+    if response.status_code == 403:
+        logger.warning(f"GKE API access failure: {node_pools}")
+        return []
+
+    if "nodePools" not in node_pools:
+        logger.warning(f"No GKE nodepools found: {node_pools}")
+        return []
 
     results = []
     for np in node_pools["nodePools"]:

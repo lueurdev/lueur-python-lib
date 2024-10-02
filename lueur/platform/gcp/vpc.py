@@ -1,5 +1,6 @@
 # mypy: disable-error-code="index,union-attr"
 import asyncio
+import logging
 from typing import Any
 
 import msgspec
@@ -12,6 +13,7 @@ from lueur.platform.gcp.client import AuthorizedSession, Client
 from lueur.rules import iter_resource
 
 __all__ = ["explore_vpc", "expand_links"]
+logger = logging.getLogger("lueur.lib")
 
 
 async def explore_vpc(
@@ -53,6 +55,14 @@ async def explore_global_networks(
     response = await c.get(f"/compute/v1/projects/{project}/global/networks")
 
     networks = msgspec.json.decode(response.content)
+
+    if response.status_code == 403:
+        logger.warning(f"Network API access failure: {networks}")
+        return []
+
+    if "items" not in networks:
+        logger.warning(f"No global networks found: {networks}")
+        return []
 
     results = []
     for net in networks["items"]:

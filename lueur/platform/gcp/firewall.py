@@ -1,4 +1,6 @@
 # mypy: disable-error-code="union-attr"
+import logging
+
 import msgspec
 from google.oauth2._service_account_async import Credentials
 
@@ -7,6 +9,7 @@ from lueur.models import GCPMeta, Resource
 from lueur.platform.gcp.client import AuthorizedSession, Client
 
 __all__ = ["explore_firewalls"]
+logger = logging.getLogger("lueur.lib")
 
 
 async def explore_firewalls(
@@ -30,6 +33,14 @@ async def explore_global_firewalls(
     response = await c.get(f"/compute/v1/projects/{project}/global/firewalls")
 
     firewalls = msgspec.json.decode(response.content)
+
+    if response.status_code == 403:
+        logger.warning(f"Firewall API access failure: {firewalls}")
+        return []
+
+    if "items" not in firewalls:
+        logger.warning(f"No global firewalls found: {firewalls}")
+        return []
 
     results = []
     for firewall in firewalls.get("items", []):

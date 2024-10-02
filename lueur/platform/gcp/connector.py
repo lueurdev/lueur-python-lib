@@ -1,4 +1,5 @@
 import asyncio
+import logging
 
 import msgspec
 from google.oauth2._service_account_async import Credentials
@@ -8,6 +9,7 @@ from lueur.models import GCPMeta, Resource
 from lueur.platform.gcp.client import AuthorizedSession, Client
 
 __all__ = ["explore_connector"]
+logger = logging.getLogger("lueur.lib")
 
 
 async def explore_connector(
@@ -53,6 +55,14 @@ async def explore_connector_providers(
 
     providers = msgspec.json.decode(response.content)
 
+    if response.status_code == 403:
+        logger.warning(f"Connectors providers API access failure: {providers}")
+        return []
+
+    if "providers" not in providers:
+        logger.warning(f"No connectors providers found: {providers}")
+        return []
+
     results = []
     for provider in providers.get("providers", []):
         name = provider["name"]
@@ -88,6 +98,14 @@ async def explore_connectors(
 
     connectors = msgspec.json.decode(response.content)
 
+    if response.status_code == 403:
+        logger.warning(f"Connectors API access failure: {connectors}")
+        return []
+
+    if "connectors" not in connectors:
+        logger.warning(f"No connectors found: {connectors}")
+        return []
+
     results = []
     for connector in connectors.get("connectors", []):
         name = connector["name"]
@@ -122,6 +140,14 @@ async def explore_connections(
     )
 
     connections = msgspec.json.decode(response.content)
+
+    if response.status_code == 403:
+        logger.warning(f"Connectors API access failure: {connections}")
+        return []
+
+    if "connections" not in connections:
+        logger.warning(f"No connections found: {connections}")
+        return []
 
     results = []
     for connection in connections.get("connections", []):

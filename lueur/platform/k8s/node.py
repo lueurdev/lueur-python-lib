@@ -1,4 +1,5 @@
 # mypy: disable-error-code="index,call-arg,union-attr"
+import logging
 from typing import Any
 
 import msgspec
@@ -11,6 +12,7 @@ from lueur.platform.k8s.client import AsyncClient, Client
 from lueur.rules import iter_resource
 
 __all__ = ["explore_node"]
+logger = logging.getLogger("lueur.lib")
 
 
 async def explore_node() -> list[Resource]:
@@ -30,6 +32,14 @@ async def explore_nodes(c: AsyncClient) -> list[Resource]:
     response = await c.execute("list_node")
 
     nodes = msgspec.json.decode(response.data)
+
+    if response.status_code == 403:  # type: ignore
+        logger.warning(f"K8S API server access failure: {nodes}")
+        return []
+
+    if "items" not in nodes:
+        logger.warning(f"No nodes found: {nodes}")
+        return []
 
     results = []
     for node in nodes["items"]:

@@ -1,4 +1,5 @@
 # mypy: disable-error-code="call-arg"
+import logging
 from typing import Any
 
 import msgspec
@@ -11,6 +12,7 @@ from lueur.platform.k8s.client import AsyncClient, Client
 from lueur.rules import iter_resource
 
 __all__ = ["explore_replicaset"]
+logger = logging.getLogger("lueur.lib")
 
 
 async def explore_replicaset() -> list[Resource]:
@@ -29,10 +31,18 @@ async def explore_replicaset() -> list[Resource]:
 async def explore_replicasets(c: AsyncClient) -> list[Resource]:
     response = await c.execute("list_replica_set_for_all_namespaces")
 
-    pods = msgspec.json.decode(response.data)
+    replicasets = msgspec.json.decode(response.data)
+
+    if response.status_code == 403:  # type: ignore
+        logger.warning(f"K8S API server access failure: {replicasets}")
+        return []
+
+    if "items" not in replicasets:
+        logger.warning(f"No replicasets found: {replicasets}")
+        return []
 
     results = []
-    for rs in pods["items"]:
+    for rs in replicasets["items"]:
         meta = rs["metadata"]
         results.append(
             Resource(

@@ -1,4 +1,6 @@
 # mypy: disable-error-code="union-attr"
+import logging
+
 import msgspec
 from google.oauth2._service_account_async import Credentials
 
@@ -7,6 +9,7 @@ from lueur.models import GCPMeta, Resource
 from lueur.platform.gcp.client import AuthorizedSession, Client
 
 __all__ = ["explore_addresses"]
+logger = logging.getLogger("lueur.lib")
 
 
 async def explore_addresses(
@@ -35,6 +38,14 @@ async def explore_global_addresses(
     response = await c.get(f"/compute/v1/projects/{project}/global/addresses")
 
     addresses = msgspec.json.decode(response.content)
+
+    if response.status_code == 403:
+        logger.warning(f"Global Address API access failure: {addresses}")
+        return []
+
+    if "items" not in addresses:
+        logger.warning(f"No global addresses found: {addresses}")
+        return []
 
     results = []
     for address in addresses.get("items", []):
@@ -69,6 +80,14 @@ async def explore_regional_addresses(
     )
 
     addresses = msgspec.json.decode(response.content)
+
+    if response.status_code == 403:
+        logger.warning(f"Regional Address API access failure: {addresses}")
+        return []
+
+    if "items" not in addresses:
+        logger.warning(f"No regional addresses found: {addresses}")
+        return []
 
     results = []
     for address in addresses.get("items", []):

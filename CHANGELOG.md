@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.10.0..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.11.0..HEAD
+
+## [0.11.0][] - 2024-10-02
+
+[0.11.0]: https://github.com/lueurdev/lueur/compare/0.10.0..0.11.0
+
+### Added
+
+-   Cases where no resources was returned for each API
 
 ## [0.10.0][] - 2024-09-25
 

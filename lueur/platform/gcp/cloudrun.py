@@ -1,4 +1,5 @@
 # mypy: disable-error-code="union-attr"
+import logging
 from typing import Any
 
 import msgspec
@@ -11,6 +12,7 @@ from lueur.platform.gcp.client import AuthorizedSession, Client
 from lueur.rules import iter_resource
 
 __all__ = ["explore_cloudrun"]
+logger = logging.getLogger("lueur.lib")
 
 
 async def explore_cloudrun(
@@ -40,6 +42,14 @@ async def explore_services(
     )
 
     services = msgspec.json.decode(response.content)
+
+    if response.status_code == 403:
+        logger.warning(f"Services API access failure: {services}")
+        return []
+
+    if "services" not in services:
+        logger.warning(f"No services found: {services}")
+        return []
 
     results = []
     for svc in services.get("services", []):
@@ -75,6 +85,14 @@ async def explore_vpcaccess_connectors(
     )
 
     connectors = msgspec.json.decode(response.content)
+
+    if response.status_code == 403:
+        logger.warning(f"VPC connectors API access failure: {connectors}")
+        return []
+
+    if "connectors" not in connectors:
+        logger.warning(f"No VPC access connectors found: {connectors}")
+        return []
 
     results = []
     for connector in connectors["connectors"]:

@@ -1,5 +1,6 @@
 # mypy: disable-error-code="union-attr"
 import asyncio
+import logging
 
 import msgspec
 from google.oauth2._service_account_async import Credentials
@@ -9,6 +10,7 @@ from lueur.models import GCPMeta, Resource
 from lueur.platform.gcp.client import AuthorizedSession, Client
 
 __all__ = ["explore_target_proxies"]
+logger = logging.getLogger("lueur.lib")
 
 
 async def explore_target_proxies(
@@ -68,6 +70,14 @@ async def explore_global_http_target_proxies(
 
     proxies = msgspec.json.decode(response.content)
 
+    if response.status_code == 403:
+        logger.warning(f"Target Proxy API access failure: {proxies}")
+        return []
+
+    if "items" not in proxies:
+        logger.warning(f"No global HTTP proxies found: {proxies}")
+        return []
+
     results = []
     for proxy in proxies.get("items", []):
         self_link = proxy["selfLink"]
@@ -101,6 +111,14 @@ async def explore_regional_http_target_proxies(
     )
 
     proxies = msgspec.json.decode(response.content)
+
+    if response.status_code == 403:
+        logger.warning(f"Target Proxy API access failure: {proxies}")
+        return []
+
+    if "items" not in proxies:
+        logger.warning(f"No regional HTTP proxies found: {proxies}")
+        return []
 
     results = []
     for proxy in proxies.get("items", []):
@@ -137,6 +155,14 @@ async def explore_global_https_target_proxies(
 
     proxies = msgspec.json.decode(response.content)
 
+    if response.status_code == 403:
+        logger.warning(f"Target Proxy API access failure: {proxies}")
+        return []
+
+    if "items" not in proxies:
+        logger.warning(f"No global HTTPs proxies found: {proxies}")
+        return []
+
     results = []
     for proxy in proxies.get("items", []):
         self_link = proxy["selfLink"]
@@ -170,6 +196,14 @@ async def explore_regional_https_target_proxies(
     )
 
     proxies = msgspec.json.decode(response.content)
+
+    if response.status_code == 403:
+        logger.warning(f"Target Proxy API access failure: {proxies}")
+        return []
+
+    if "items" not in proxies:
+        logger.warning(f"No regional HTTPs proxies found: {proxies}")
+        return []
 
     results = []
     for proxy in proxies.get("items", []):

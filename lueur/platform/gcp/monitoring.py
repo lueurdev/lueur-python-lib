@@ -1,5 +1,6 @@
 # mypy: disable-error-code="attr-defined,operator,union-attr"
 import asyncio
+import logging
 from typing import Any
 
 import msgspec
@@ -12,6 +13,7 @@ from lueur.platform.gcp.client import AuthorizedSession, Client
 from lueur.rules import iter_resource
 
 __all__ = ["explore_monitoring"]
+logger = logging.getLogger("lueur.lib")
 
 
 async def explore_monitoring(
@@ -59,6 +61,14 @@ async def explore_services(
 
     services = msgspec.json.decode(response.content)
 
+    if response.status_code == 403:
+        logger.warning(f"Monitoring API access failure: {services}")
+        return []
+
+    if "services" not in services:
+        logger.warning(f"No monitored services found: {services}")
+        return []
+
     results = []
     for svc in services["services"]:
         name = svc["name"]
@@ -94,7 +104,12 @@ async def explore_slos(
 
     slos = msgspec.json.decode(response.content)
 
-    if not slos:
+    if response.status_code == 403:
+        logger.warning(f"Monitoring API access failure: {slos}")
+        return []
+
+    if "serviceLevelObjectives" not in slos:
+        logger.warning(f"No SLOs found: {slos}")
         return []
 
     results = []
@@ -129,6 +144,14 @@ async def explore_alert_policies(
 
     policies = msgspec.json.decode(response.content)
 
+    if response.status_code == 403:
+        logger.warning(f"Monitoring API access failure: {policies}")
+        return []
+
+    if "alertPolicies" not in policies:
+        logger.warning(f"No alert policies found: {policies}")
+        return []
+
     results = []
     for nc in policies["alertPolicies"]:
         name = nc["name"]
@@ -161,6 +184,14 @@ async def explore_notification_channels(
 
     channels = msgspec.json.decode(response.content)
 
+    if response.status_code == 403:
+        logger.warning(f"Monitoring API access failure: {channels}")
+        return []
+
+    if "notificationChannels" not in channels:
+        logger.warning(f"No alert channels found: {channels}")
+        return []
+
     results = []
     for nc in channels["notificationChannels"]:
         name = nc["name"]
@@ -190,6 +221,14 @@ async def explore_groups(c: AuthorizedSession, project: str) -> list[Resource]:
     response = await c.get(f"/v3/projects/{project}/groups")
 
     groups = msgspec.json.decode(response.content)
+
+    if response.status_code == 403:
+        logger.warning(f"Monitoring API access failure: {groups}")
+        return []
+
+    if "group" not in groups:
+        logger.warning(f"No monitoring group found: {groups}")
+        return []
 
     results = []
     for g in groups.get("group", []):
@@ -222,6 +261,14 @@ async def explore_incidents(
     response = await c.get(f"/v3/projects/{project}/incidents")
 
     incidents = msgspec.json.decode(response.content)
+
+    if response.status_code == 403:
+        logger.warning(f"Monitoring API access failure: {incidents}")
+        return []
+
+    if "incidents" not in incidents:
+        logger.warning(f"No monitoring incidents found: {incidents}")
+        return []
 
     results = []
     for g in incidents.get("incidents", []):

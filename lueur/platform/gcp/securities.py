@@ -1,4 +1,6 @@
 # mypy: disable-error-code="union-attr"
+import logging
+
 import msgspec
 from google.oauth2._service_account_async import Credentials
 
@@ -7,6 +9,7 @@ from lueur.models import GCPMeta, Resource
 from lueur.platform.gcp.client import AuthorizedSession, Client
 
 __all__ = ["explore_securities"]
+logger = logging.getLogger("lueur.lib")
 
 
 async def explore_securities(
@@ -36,6 +39,14 @@ async def explore_global_securities(
     )
 
     securities = msgspec.json.decode(response.content)
+
+    if response.status_code == 403:
+        logger.warning(f"Securities API access failure: {securities}")
+        return []
+
+    if "items" not in securities:
+        logger.warning(f"No global securities found: {securities}")
+        return []
 
     results = []
     for security in securities.get("items", []):
@@ -70,6 +81,14 @@ async def explore_regional_securities(
     )
 
     securities = msgspec.json.decode(response.content)
+
+    if response.status_code == 403:
+        logger.warning(f"Securities API access failure: {securities}")
+        return []
+
+    if "items" not in securities:
+        logger.warning(f"No regional securities found: {securities}")
+        return []
 
     results = []
     for security in securities.get("items", []):

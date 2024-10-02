@@ -1,4 +1,5 @@
 # mypy: disable-error-code="call-arg,index"
+import logging
 from typing import Any
 
 import msgspec
@@ -11,6 +12,7 @@ from lueur.platform.k8s.client import AsyncClient, Client
 from lueur.rules import iter_resource
 
 __all__ = ["explore_deployment"]
+logger = logging.getLogger("lueur.lib")
 
 
 async def explore_deployment() -> list[Resource]:
@@ -30,6 +32,14 @@ async def explore_deployments(c: AsyncClient) -> list[Resource]:
     response = await c.execute("list_deployment_for_all_namespaces")
 
     deployments = msgspec.json.decode(response.data)
+
+    if response.status_code == 403:  # type: ignore
+        logger.warning(f"K8S API server access failure: {deployments}")
+        return []
+
+    if "items" not in deployments:
+        logger.warning(f"No deployments found: {deployments}")
+        return []
 
     results = []
     for deployment in deployments["items"]:

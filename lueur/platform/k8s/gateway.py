@@ -1,4 +1,5 @@
 # mypy: disable-error-code="call-arg,index"
+import logging
 from typing import Any
 
 import msgspec
@@ -11,6 +12,7 @@ from lueur.platform.k8s.client import AsyncClient, Client
 from lueur.rules import iter_resource
 
 __all__ = ["explore_gateway"]
+logger = logging.getLogger("lueur.lib")
 
 
 async def explore_gateway() -> list[Resource]:
@@ -58,10 +60,15 @@ async def explore_namespaced_gateways(
         namespace=ns,
     )
 
-    if response.status != 200:
+    gateways = msgspec.json.decode(response.data)
+
+    if response.status_code == 403:  # type: ignore
+        logger.warning(f"K8S API server access failure: {gateways}")
         return []
 
-    gateways = msgspec.json.decode(response.data)
+    if "items" not in gateways:
+        logger.warning(f"No gateways found: {gateways}")
+        return []
 
     results = []
     for gw in gateways["items"]:
@@ -97,10 +104,15 @@ async def explore_namespaced_http_routes(
         namespace=ns,
     )
 
-    if response.status != 200:
+    routes = msgspec.json.decode(response.data)
+
+    if response.status_code == 403:  # type: ignore
+        logger.warning(f"K8S API server access failure: {routes}")
         return []
 
-    routes = msgspec.json.decode(response.data)
+    if "items" not in routes:
+        logger.warning(f"No gateway routes found: {routes}")
+        return []
 
     results = []
     for route in routes["items"]:

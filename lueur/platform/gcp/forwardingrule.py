@@ -1,4 +1,6 @@
 # mypy: disable-error-code="union-attr"
+import logging
+
 import msgspec
 from google.oauth2._service_account_async import Credentials
 
@@ -7,6 +9,7 @@ from lueur.models import GCPMeta, Resource
 from lueur.platform.gcp.client import AuthorizedSession, Client
 
 __all__ = ["explore_forwardingrules"]
+logger = logging.getLogger("lueur.lib")
 
 
 async def explore_forwardingrules(
@@ -36,6 +39,14 @@ async def explore_global_forwardingrules(
     )
 
     rules = msgspec.json.decode(response.content)
+
+    if response.status_code == 403:
+        logger.warning(f"Forwadingrules API access failure: {rules}")
+        return []
+
+    if "items" not in rules:
+        logger.warning(f"No global forwadingrules found: {rules}")
+        return []
 
     results = []
     for rule in rules.get("items", []):
@@ -70,6 +81,14 @@ async def explore_regional_forwardingrules(
     )
 
     rules = msgspec.json.decode(response.content)
+
+    if response.status_code == 403:
+        logger.warning(f"Forwadingrules API access failure: {rules}")
+        return []
+
+    if "items" not in rules:
+        logger.warning(f"No regional forwadingrules found: {rules}")
+        return []
 
     results = []
     for rule in rules.get("items", []):

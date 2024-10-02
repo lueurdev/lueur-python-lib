@@ -1,4 +1,6 @@
 # mypy: disable-error-code="index,union-attr"
+import logging
+
 import msgspec
 from google.oauth2._service_account_async import Credentials
 
@@ -7,6 +9,7 @@ from lueur.models import GCPMeta, Resource
 from lueur.platform.gcp.client import AuthorizedSession, Client
 
 __all__ = ["explore_storage"]
+logger = logging.getLogger("lueur.lib")
 
 
 async def explore_storage(
@@ -25,11 +28,17 @@ async def explore_storage(
 # Private functions
 ###############################################################################
 async def explore_buckets(c: AuthorizedSession, project: str) -> list[Resource]:
-    response = await c.get(
-        "/storage/v1/b", params={"project": project}
-    )
+    response = await c.get("/storage/v1/b", params={"project": project})
 
     buckets = msgspec.json.decode(response.content)
+
+    if response.status_code == 403:
+        logger.warning(f"Storage API access failure: {buckets}")
+        return []
+
+    if "items" not in buckets:
+        logger.warning(f"No buckets found: {buckets}")
+        return []
 
     results = []
     for bucket in buckets["items"]:

@@ -1,5 +1,6 @@
 # mypy: disable-error-code="index,union-attr"
 import asyncio
+import logging
 from typing import Any
 
 import msgspec
@@ -12,6 +13,7 @@ from lueur.platform.gcp.client import AuthorizedSession, Client
 from lueur.rules import iter_resource
 
 __all__ = ["explore_sql", "expand_links"]
+logger = logging.getLogger("lueur.lib")
 
 
 async def explore_sql(
@@ -55,6 +57,14 @@ async def explore_instances(
 
     instances = msgspec.json.decode(response.content)
 
+    if response.status_code == 403:
+        logger.warning(f"CloudSQL API access failure: {instances}")
+        return []
+
+    if "items" not in instances:
+        logger.warning(f"No CloudSQL instances found: {instances}")
+        return []
+
     results = []
     for inst in instances["items"]:
         self_link = inst.get("selfLink")
@@ -84,6 +94,14 @@ async def explore_users(
     response = await c.get(f"/v1/projects/{project}/instances/{instance}/users")
 
     users = msgspec.json.decode(response.content)
+
+    if response.status_code == 403:
+        logger.warning(f"CloudSQL API access failure: {users}")
+        return []
+
+    if "items" not in users:
+        logger.warning(f"No CloudSQL users found: {users}")
+        return []
 
     results = []
     for user in users["items"]:
@@ -116,6 +134,14 @@ async def explore_databases(
     )
 
     databases = msgspec.json.decode(response.content)
+
+    if response.status_code == 403:
+        logger.warning(f"CloudSQL API access failure: {databases}")
+        return []
+
+    if "items" not in databases:
+        logger.warning(f"No CloudSQL databases found: {databases}")
+        return []
 
     results = []
     for database in databases["items"]:

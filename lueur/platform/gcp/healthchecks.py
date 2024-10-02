@@ -1,4 +1,6 @@
 # mypy: disable-error-code="union-attr"
+import logging
+
 import msgspec
 from google.oauth2._service_account_async import Credentials
 
@@ -7,6 +9,7 @@ from lueur.models import GCPMeta, Resource
 from lueur.platform.gcp.client import AuthorizedSession, Client
 
 __all__ = ["explore_health_checks"]
+logger = logging.getLogger("lueur.lib")
 
 
 async def explore_health_checks(
@@ -35,10 +38,18 @@ async def explore_global_healthchecks(
         f"/compute/v1/projects/{project}/global/healthChecks"
     )
 
-    firewalls = msgspec.json.decode(response.content)
+    healthchecks = msgspec.json.decode(response.content)
+
+    if response.status_code == 403:
+        logger.warning(f"Healthchecks API access failure: {healthchecks}")
+        return []
+
+    if "items" not in healthchecks:
+        logger.warning(f"No global healthchecks found: {healthchecks}")
+        return []
 
     results = []
-    for hc in firewalls.get("items", []):
+    for hc in healthchecks.get("items", []):
         self_link = hc["selfLink"]
         name = hc["name"]
         display = name
@@ -69,10 +80,18 @@ async def explore_regional_healthchecks(
         f"/compute/v1/projects/{project}/regions/{location}/healthChecks"
     )
 
-    firewalls = msgspec.json.decode(response.content)
+    healthchecks = msgspec.json.decode(response.content)
+
+    if response.status_code == 403:
+        logger.warning(f"Healthchecks API access failure: {healthchecks}")
+        return []
+
+    if "items" not in healthchecks:
+        logger.warning(f"No regional healthchecks found: {healthchecks}")
+        return []
 
     results = []
-    for hc in firewalls.get("items", []):
+    for hc in healthchecks.get("items", []):
         self_link = hc["selfLink"]
         name = hc["name"]
         display = name
