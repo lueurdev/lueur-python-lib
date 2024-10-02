@@ -343,7 +343,11 @@ async def explore_zonal_backend_groups(
 ) -> list[Resource]:
     zones = await list_project_zones(project)
 
-    results = []
+    results: list[Resource] = []
+
+    if not zones:
+        return results
+
     tasks: list[asyncio.Task] = []
 
     async with asyncio.TaskGroup() as tg:

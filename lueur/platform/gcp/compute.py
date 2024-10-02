@@ -19,7 +19,10 @@ async def explore_compute(
 ) -> list[Resource]:
     zones = await list_project_zones(project, creds)
 
-    resources = []
+    resources: list[Resource] = []
+
+    if not zones:
+        return resources
 
     async with Client("https://compute.googleapis.com", creds) as c:
         buckets = await explore_all_zones_instances(c, project, zones)

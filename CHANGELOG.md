@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.11.0..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.11.1..HEAD
+
+## [0.11.1][] - 2024-10-02
+
+[0.11.1]: https://github.com/lueurdev/lueur/compare/0.11.0..0.11.1
+
+### Fixed
+
+-   Deal with no zones found
 
 ## [0.11.0][] - 2024-10-02
 
