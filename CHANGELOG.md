@@ -4,6 +4,11 @@
 
 [Unreleased]: https://github.com/lueurdev/lueur/compare/0.11.1..HEAD
 
+### Added
+
+-   Link cloudrun to network/subnet
+-   Link network/subnet to backend service
+
 ## [0.11.1][] - 2024-10-02
 
 [0.11.1]: https://github.com/lueurdev/lueur/compare/0.11.0..0.11.1

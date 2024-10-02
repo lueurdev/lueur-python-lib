@@ -496,17 +496,38 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
 
             cloudrun_name = f"projects/{project}/locations/{location}/services/{service.obj}"  # noqa E501
             p = f"$.resources[?@.meta.kind=='cloudrun' && @.meta.name=='{cloudrun_name}']"  # noqa E501
-            for subnet in iter_resource(serialized, p):
-                add_link(
-                    d,
-                    r_id,
-                    Link(
-                        direction="out",
-                        kind="subnet",
-                        path=subnet.path,
-                        pointer=str(subnet.pointer()),
-                    ),
-                )
+            for cloudrun in iter_resource(serialized, p):
+                tpl = cloudrun.obj["struct"]["template"]  # type: ignore
+                nics = tpl.get("vpcAccess", {}).get("networkInterfaces")
+                if nics:
+                    for nic in nics:
+                        network = nic["network"]
+                        p = f"$.resources[?@.meta.kind=='network' && @.meta.name=='{network}']"  # noqa E501
+                        for nk in iter_resource(serialized, p):
+                            add_link(
+                                d,
+                                r_id,
+                                Link(
+                                    direction="out",
+                                    kind="network",
+                                    path=nk.path,
+                                    pointer=str(nk.pointer()),
+                                ),
+                            )
+
+                        subnet = nic["subnetwork"]
+                        p = f"$.resources[?@.meta.kind=='subnet' && @.meta.name=='{subnet}']"  # noqa E501
+                        for sn in iter_resource(serialized, p):
+                            add_link(
+                                d,
+                                r_id,
+                                Link(
+                                    direction="out",
+                                    kind="subnet",
+                                    path=sn.path,
+                                    pointer=str(sn.pointer()),
+                                ),
+                            )
 
         p = f"$.resources[?@.meta.kind=='zonal-neg' && @.struct.selfLink=='{group}']"  # noqa E501
         for zonal_neg in iter_resource(serialized, p):
