@@ -2,7 +2,11 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.11.1..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.12.0..HEAD
+
+## [0.12.0][] - 2024-10-02
+
+[0.12.0]: https://github.com/lueurdev/lueur/compare/0.11.1..0.12.0
 
 ### Added
 
