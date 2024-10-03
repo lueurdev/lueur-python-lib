@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.14.6..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.14.7..HEAD
+
+## [0.14.7][] - 2024-10-03
+
+[0.14.7]: https://github.com/lueurdev/lueur/compare/0.14.6..0.14.7
+
+### Fixed
+
+-   Fix wrong variable called to retrieve parent
 
 ## [0.14.6][] - 2024-10-03
 
