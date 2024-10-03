@@ -227,7 +227,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                         r_id,
                         Link(
                             direction="out",
-                            kind="cloudrun-vpcaccess-connector",
+                            kind="instance",
                             path=svc.path,
                             pointer=str(svc.pointer()),
                         ),

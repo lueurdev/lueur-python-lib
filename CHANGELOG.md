@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.12.1..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.13.0..HEAD
+
+## [0.13.0][] - 2024-10-03
+
+[0.13.0]: https://github.com/lueurdev/lueur/compare/0.12.1..0.13.0
+
+### Added
+
+-   Extend links for alerts and slo
 
 ## [0.12.1][] - 2024-10-03
 

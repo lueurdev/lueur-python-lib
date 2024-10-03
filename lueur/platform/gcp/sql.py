@@ -217,3 +217,72 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     pointer=str(svc.pointer()),
                 ),
             )
+
+    for alertnc in iter_resource(
+        serialized,
+        "$.resources[?@.meta.kind=='alert-policy'].struct.notificationChannels.*",  # noqa E501
+    ):
+        r_id = alertnc.parent.parent.parent.obj["id"]  # type: ignore
+        conditions = alertnc.parent.parent.obj.get("conditions", [])
+
+        for condition in conditions:
+            ft = condition["conditionThreshold"]["filter"]
+            if "cloudsql_database" in ft:
+                for i in iter_resource(
+                    serialized,
+                    "$.resources[?@.meta.kind=='database'].meta.name",  # noqa E501
+                ):
+                    d_id = i.parent.parent.obj["id"]  # type: ignore
+
+                    add_link(
+                        d,
+                        d_id,
+                        Link(
+                            direction="out",
+                            kind="alert-policy",
+                            path=alertnc.path,
+                            pointer=str(alertnc.pointer()),
+                        ),
+                    )
+
+    slos = {}
+    for slo in iter_resource(
+        serialized, "$.resources[?@.meta.kind=='slo'].meta.name"
+    ):
+        r_id = slo.parent.parent.obj["id"]  # type: ignore
+        slos[slo.value] = r_id
+        sli = slo.parent.parent.obj["struct"]["serviceLevelIndicator"]  #  type: ignore
+        window = sli.get("windowsBased")
+        if window:
+            bad_svc_filter = (
+                window.get("goodTotalRatioThreshold", {})
+                .get("performance", {})
+                .get("goodTotalRatio", {})
+                .get("badServiceFilter")
+            )
+
+            good_svc_filter = (
+                window.get("goodTotalRatioThreshold", {})
+                .get("performance", {})
+                .get("goodTotalRatio", {})
+                .get("goodServiceFilter")
+            )
+
+            if ("cloudsql_database" in bad_svc_filter) or (
+                "cloudsql_database" in good_svc_filter
+            ):  # noqa E501
+                for i in iter_resource(
+                    serialized,
+                    "$.resources[?@.meta.kind=='database'].meta.name",  # noqa E501
+                ):
+                    d_id = i.parent.parent.obj["id"]  # type: ignore
+                    add_link(
+                        d,
+                        d_id,
+                        Link(
+                            direction="out",
+                            kind="slo",
+                            path=slo.path,
+                            pointer=str(slo.pointer()),
+                        ),
+                    )

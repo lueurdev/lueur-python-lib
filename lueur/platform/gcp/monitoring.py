@@ -340,6 +340,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
         "$.resources[?@.meta.kind=='alert-policy'].struct.notificationChannels.*",  # noqa E501
     ):
         r_id = alertnc.parent.parent.parent.obj["id"]  # type: ignore
+
         name = alertnc.value
         p = f"$.resources[?@.meta.kind=='notification-channel' && @.meta.name=='{name}']"  # noqa E501
         for nc in iter_resource(serialized, p):
