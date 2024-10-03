@@ -113,6 +113,9 @@ class AuthorizedSession(httpx.AsyncClient):
                 Request(session), method, url, request_headers
             )
 
+            # we want to force or timeout value
+            kwargs.pop("timeout", None)
+
             response: httpx.Response = await super(
                 AuthorizedSession, self
             ).request(
