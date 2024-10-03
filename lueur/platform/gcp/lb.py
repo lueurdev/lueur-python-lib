@@ -516,7 +516,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                             )
 
                         subnet = nic["subnetwork"]
-                        p = f"$.resources[?@.meta.kind=='subnet' && @.meta.name=='{subnet}']"  # noqa E501
+                        p = f"$.resources[?@.meta.kind=='subnet' && @.meta.display=='{subnet}']"  # noqa E501
                         for sn in iter_resource(serialized, p):
                             add_link(
                                 d,

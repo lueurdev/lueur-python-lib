@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.12.0..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.12.1..HEAD
+
+## [0.12.1][] - 2024-10-03
+
+[0.12.1]: https://github.com/lueurdev/lueur/compare/0.12.0..0.12.1
+
+### Fixed
+
+-   Link LB to its subnets
 
 ## [0.12.0][] - 2024-10-02
 
