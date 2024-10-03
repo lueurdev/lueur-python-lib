@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.14.0..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.14.1..HEAD
+
+## [0.14.1][] - 2024-10-03
+
+[0.14.1]: https://github.com/lueurdev/lueur/compare/0.14.0..0.14.1
+
+### Fixed
+
+-   Correct path back to parent
 
 ## [0.14.0][] - 2024-10-03
 
