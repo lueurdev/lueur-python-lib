@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.14.14..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.14.15..HEAD
+
+## [0.14.15][] - 2024-10-03
+
+[0.14.15]: https://github.com/lueurdev/lueur/compare/0.14.14..0.14.15
+
+### Fixed
+
+-   Bad copy paste in dns
 
 ## [0.14.14][] - 2024-10-03
 

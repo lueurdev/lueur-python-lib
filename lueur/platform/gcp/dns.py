@@ -54,12 +54,12 @@ async def explore_managedzones(
         logger.warning(f"DNS API access failure: {managedZones}")
         return []
 
-    if "rrsets" not in managedZones:
+    if "managedZones" not in managedZones:
         logger.warning(f"No managedZones found: {managedZones}")
         return []
 
     results = []
-    for managedZone in managedZones["rrsets"]:
+    for managedZone in managedZones["managedZones"]:
         results.append(
             Resource(
                 id=make_id(managedZone["id"]),
