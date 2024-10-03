@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.14.8..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.14.9..HEAD
+
+## [0.14.9][] - 2024-10-03
+
+[0.14.9]: https://github.com/lueurdev/lueur/compare/0.14.8..0.14.9
+
+### Added
+
+-   Use tenacity to perform retries
 
 ## [0.14.8][] - 2024-10-03
 

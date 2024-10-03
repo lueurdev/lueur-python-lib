@@ -7,6 +7,12 @@ from google.auth import exceptions, transport
 from google.auth._credentials_async import Credentials
 from google.auth._default_async import default_async
 from google.oauth2._service_account_async import Credentials as OAuthCreds
+from tenacity import (
+    retry,
+    retry_if_exception_type,
+    stop_after_attempt,
+    wait_exponential,
+)
 
 __all__ = ["Client", "AuthorizedSession"]
 
@@ -47,6 +53,14 @@ class Request(transport.Request):
     def __init__(self, httpx_client: httpx.AsyncClient) -> None:
         self.client = httpx_client
 
+    @retry(
+        retry=(
+            retry_if_exception_type(httpx.TimeoutException)
+            | retry_if_exception_type(httpx.ConnectError)
+        ),
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=5, max=20),
+    )
     async def __call__(
         self,
         url: str,
@@ -120,6 +134,7 @@ async def Client(
         credentials, _ = default_async()
 
     async with AuthorizedSession(
-        credentials, base_url=httpx.URL(base_url)  # type: ignore
+        credentials,  # type: ignore
+        base_url=httpx.URL(base_url),
     ) as s:
         yield s
