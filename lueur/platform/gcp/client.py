@@ -1,5 +1,4 @@
 import asyncio
-import functools
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from typing import Any
@@ -61,8 +60,13 @@ class Request(transport.Request):
     .. automethod:: __call__
     """
 
-    def __init__(self, httpx_client: httpx.AsyncClient | None = None):
+    def __init__(
+        self,
+        httpx_client: httpx.AsyncClient | None = None,
+        timeout: httpx.Timeout | None = None,
+    ) -> None:
         self.client = httpx_client
+        self.timeout = timeout
 
     async def __call__(
         self,
@@ -70,7 +74,7 @@ class Request(transport.Request):
         method: str = "GET",
         body: Any = None,
         headers: dict[str, str] | None = None,
-        timeout: float = 180,
+        timeout: httpx.Timeout | None = None,
         **kwargs,
     ):
         """
@@ -103,7 +107,7 @@ class Request(transport.Request):
                 url,
                 data=body,
                 headers=headers,
-                timeout=timeout,
+                timeout=self.timeout,
                 **kwargs,
             )
             return _Response(response)
@@ -168,6 +172,7 @@ class AuthorizedSession(httpx.AsyncClient):
         self._auth_request_session: httpx.AsyncClient | None = None
         self._auto_decompress = auto_decompress
         self._refresh_lock = asyncio.Lock()
+        self._timeout = httpx.Timeout(read=60.0, connect=20.0)
 
     async def request(  # type: ignore
         self,
@@ -175,8 +180,6 @@ class AuthorizedSession(httpx.AsyncClient):
         url: str,
         data: dict[str, str] | None = None,
         headers: dict[str, str] | None = None,
-        max_allowed_time: float | None = None,
-        timeout: float = 180.0,
         **kwargs,
     ) -> httpx.Response:
         """Implementation of Authorized Session httpx request.
@@ -189,38 +192,19 @@ class AuthorizedSession(httpx.AsyncClient):
                 file-like object to send in the body of the Request.
             headers (Optional[dict]): Dictionary of HTTP Headers to send with
                 the Request.
-            timeout (Optional[Union[float, httpx.ClientTimeout]]):
-                The amount of time in seconds to wait for the server response
-                with each individual request. Can also be passed as an
-                ``httpx.ClientTimeout`` object.
-            max_allowed_time (Optional[float]):
-                If the method runs longer than this, a ``Timeout`` exception is
-                automatically raised. Unlike the ``timeout`` parameter, this
-                value applies to the total method execution time, even if
-                multiple requests are made under the hood.
-                Mind that it is not guaranteed that the timeout error is raised
-                at ``max_allowed_time``. It might take longer, for example, if
-                an underlying request takes a lot of time, but the request
-                itself does not timeout, e.g. if a large file is being
-                transmitted. The timout error will be raised after such
-                request completes.
         """
         async with httpx.AsyncClient(http2=True) as self._auth_request_session:
-            self._auth_request = Request(self._auth_request_session)
+            self._auth_request = Request(
+                self._auth_request_session, timeout=self._timeout
+            )
 
             _credential_refresh_attempt = kwargs.pop(
                 "_credential_refresh_attempt", 0
             )
             request_headers = headers.copy() if headers is not None else {}
 
-            auth_request = (
-                self._auth_request
-                if timeout is None
-                else functools.partial(self._auth_request, timeout=timeout)
-            )
-
             await self.credentials.before_request(
-                auth_request, method, url, request_headers
+                self._auth_request, method, url, request_headers
             )
 
             response: httpx.Response = await super(
@@ -230,7 +214,7 @@ class AuthorizedSession(httpx.AsyncClient):
                 url,
                 data=data,
                 headers=request_headers,
-                timeout=timeout,
+                timeout=self._timeout,
                 **kwargs,
             )
 
@@ -238,16 +222,10 @@ class AuthorizedSession(httpx.AsyncClient):
                 response.status_code in self._refresh_status_codes
                 and _credential_refresh_attempt < self._max_refresh_attempts
             ):
-                auth_request = (
-                    self._auth_request
-                    if timeout is None
-                    else functools.partial(self._auth_request, timeout=timeout)
-                )
-
                 async with self._refresh_lock:
                     loop = asyncio.get_running_loop()
                     await loop.run_in_executor(
-                        None, self.credentials.refresh, auth_request
+                        None, self.credentials.refresh, self._auth_request
                     )
 
                 return await self.request(
@@ -255,7 +233,7 @@ class AuthorizedSession(httpx.AsyncClient):
                     url,
                     data=data,
                     headers=headers,
-                    timeout=timeout,
+                    timeout=self._timeout,
                     _credential_refresh_attempt=_credential_refresh_attempt + 1,
                     **kwargs,
                 )
