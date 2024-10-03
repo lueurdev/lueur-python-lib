@@ -105,7 +105,7 @@ class Request(transport.Request):
                 url,
                 data=body,
                 headers=headers,
-                timeout=timeout or httpx.Timeout(20, read=60),
+                timeout=timeout or httpx.Timeout(20, connect=60, read=60),
                 **kwargs,
             )
             return _Response(response)
