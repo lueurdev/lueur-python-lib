@@ -46,7 +46,7 @@ async def explore_dns(
 async def explore_managedzones(
     c: AuthorizedSession, project: str
 ) -> list[Resource]:
-    response = await c.get("/dns/v1/projects/{project}/managedZones")
+    response = await c.get(f"/dns/v1/projects/{project}/managedZones")
 
     managedZones = msgspec.json.decode(response.content)
 
@@ -82,7 +82,7 @@ async def explore_recordsets(
     c: AuthorizedSession, project: str, zone: str
 ) -> list[Resource]:
     response = await c.get(
-        "/dns/v1/projects/{project}/managedZones/{zone}/rrsets"
+        f"/dns/v1/projects/{project}/managedZones/{zone}/rrsets"
     )
 
     recordsets = msgspec.json.decode(response.content)
