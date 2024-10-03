@@ -76,7 +76,7 @@ class Request(transport.Request):
                 url,
                 data=body,
                 headers=headers,
-                timeout=timeout or httpx.Timeout(60),
+                timeout=httpx.Timeout(60),
                 **kwargs,
             )
             return _Response(response)
