@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.13.0..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.14.0..HEAD
+
+## [0.14.0][] - 2024-10-03
+
+[0.14.0]: https://github.com/lueurdev/lueur/compare/0.13.0..0.14.0
+
+### Added
+
+-   DNS support
 
 ## [0.13.0][] - 2024-10-03
 

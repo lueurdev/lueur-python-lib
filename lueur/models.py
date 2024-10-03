@@ -44,6 +44,7 @@ class Meta(BaseModel):
             "memorystore",
             "sql",
             "gke",
+            "dns"
         ]
         | None
     )

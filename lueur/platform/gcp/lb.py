@@ -680,3 +680,22 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     pointer=str(urlmap.pointer()),
                 ),
             )
+
+    for host in iter_resource(
+        serialized,
+        "$.resources[?@.meta.kind=='global-urlmap'].struct.hostRules.*.hosts.*",  # noqa E501
+    ):
+        r_id = cast(str, s.parent.parent.parent.parent.parent.parent.obj["id"])  # type: ignore
+        h = host.value
+        p = f"$.resources[?@.meta.kind=='dns'].struct.rrdatas.*.[?@.name=='{h}']"  # noqa E501
+        for recordset in iter_resource(serialized, p):
+            add_link(
+                d,
+                r_id,
+                Link(
+                    direction="out",
+                    kind="dns",
+                    path=recordset.path,
+                    pointer=str(recordset.pointer()),
+                ),
+            )

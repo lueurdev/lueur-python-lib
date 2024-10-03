@@ -12,6 +12,7 @@ from lueur.platform.gcp.cloudrun import expand_links as cloudrun_links
 from lueur.platform.gcp.cloudrun import explore_cloudrun
 from lueur.platform.gcp.compute import explore_compute
 from lueur.platform.gcp.connector import explore_connector
+from lueur.platform.gcp.dns import explore_dns
 from lueur.platform.gcp.firewall import explore_firewalls
 from lueur.platform.gcp.forwardingrule import explore_forwardingrules
 from lueur.platform.gcp.gke import expand_links as gke_expand_links
@@ -168,6 +169,12 @@ async def explore(
                 tg.create_task(
                     explore_memorystore(project, creds),
                     name="explore_memorystore",
+                )
+            )
+            tasks.append(
+                tg.create_task(
+                    explore_dns(project, creds),
+                    name="explore_dns",
                 )
             )
 
