@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.14.5..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.14.6..HEAD
+
+## [0.14.6][] - 2024-10-03
+
+[0.14.6]: https://github.com/lueurdev/lueur/compare/0.14.5..0.14.6
+
+### Changed
+
+-   Simplified async gcp client
 
 ## [0.14.5][] - 2024-10-03
 
