@@ -63,10 +63,8 @@ class Request(transport.Request):
     def __init__(
         self,
         httpx_client: httpx.AsyncClient | None = None,
-        timeout: httpx.Timeout | None = None,
     ) -> None:
         self.client = httpx_client
-        self.timeout = timeout
 
     async def __call__(
         self,
@@ -74,7 +72,7 @@ class Request(transport.Request):
         method: str = "GET",
         body: Any = None,
         headers: dict[str, str] | None = None,
-        timeout: httpx.Timeout | None = None,
+        timeout: httpx._types.TimeoutTypes | None = None,
         **kwargs,
     ):
         """
@@ -107,7 +105,7 @@ class Request(transport.Request):
                 url,
                 data=body,
                 headers=headers,
-                timeout=self.timeout,
+                timeout=timeout or httpx.Timeout(read=60, connect=20),
                 **kwargs,
             )
             return _Response(response)
@@ -172,7 +170,6 @@ class AuthorizedSession(httpx.AsyncClient):
         self._auth_request_session: httpx.AsyncClient | None = None
         self._auto_decompress = auto_decompress
         self._refresh_lock = asyncio.Lock()
-        self._timeout = httpx.Timeout(read=60.0, connect=20.0)
 
     async def request(  # type: ignore
         self,
@@ -194,9 +191,7 @@ class AuthorizedSession(httpx.AsyncClient):
                 the Request.
         """
         async with httpx.AsyncClient(http2=True) as self._auth_request_session:
-            self._auth_request = Request(
-                self._auth_request_session, timeout=self._timeout
-            )
+            self._auth_request = Request(self._auth_request_session)
 
             _credential_refresh_attempt = kwargs.pop(
                 "_credential_refresh_attempt", 0
@@ -214,7 +209,6 @@ class AuthorizedSession(httpx.AsyncClient):
                 url,
                 data=data,
                 headers=request_headers,
-                timeout=self._timeout,
                 **kwargs,
             )
 
@@ -233,7 +227,6 @@ class AuthorizedSession(httpx.AsyncClient):
                     url,
                     data=data,
                     headers=headers,
-                    timeout=self._timeout,
                     _credential_refresh_attempt=_credential_refresh_attempt + 1,
                     **kwargs,
                 )

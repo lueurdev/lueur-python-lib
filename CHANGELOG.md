@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.14.2..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.14.3..HEAD
+
+## [0.14.3][] - 2024-10-03
+
+[0.14.3]: https://github.com/lueurdev/lueur/compare/0.14.2..0.14.3
+
+### Fixed
+
+-   GCP client timeout format
 
 ## [0.14.2][] - 2024-10-03
 
