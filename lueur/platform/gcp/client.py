@@ -53,14 +53,6 @@ class Request(transport.Request):
     def __init__(self, httpx_client: httpx.AsyncClient) -> None:
         self.client = httpx_client
 
-    @retry(
-        retry=(
-            retry_if_exception_type(httpx.TimeoutException)
-            | retry_if_exception_type(httpx.ConnectError)
-        ),
-        stop=stop_after_attempt(3),
-        wait=wait_exponential(multiplier=1, min=5, max=20),
-    )
     async def __call__(
         self,
         url: str,
@@ -76,7 +68,7 @@ class Request(transport.Request):
                 url,
                 data=body,
                 headers=headers,
-                timeout=httpx.Timeout(60),
+                timeout=timeout or httpx.Timeout(60),
                 **kwargs,
             )
             return _Response(response)
@@ -95,6 +87,14 @@ class AuthorizedSession(httpx.AsyncClient):
         super(AuthorizedSession, self).__init__(**kwargs)
         self.credentials: Credentials = credentials
 
+    @retry(
+        retry=(
+            retry_if_exception_type(httpx.TimeoutException)
+            | retry_if_exception_type(httpx.ConnectError)
+        ),
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=5, max=20),
+    )
     async def request(  # type: ignore
         self,
         method: str,
@@ -104,6 +104,7 @@ class AuthorizedSession(httpx.AsyncClient):
         **kwargs,
     ) -> httpx.Response:
         limits = httpx.Limits(max_connections=10, max_keepalive_connections=10)
+        timeout = httpx.Timeout(60)
 
         async with httpx.AsyncClient(http2=True, limits=limits) as session:
             request_headers = headers.copy() if headers is not None else {}
@@ -119,6 +120,7 @@ class AuthorizedSession(httpx.AsyncClient):
                 url,
                 data=data,
                 headers=request_headers,
+                timeout=timeout,
                 **kwargs,
             )
 

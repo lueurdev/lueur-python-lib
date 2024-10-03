@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.14.11..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.14.12..HEAD
+
+## [0.14.12][] - 2024-10-03
+
+[0.14.12]: https://github.com/lueurdev/lueur/compare/0.14.11..0.14.12
+
+### Fixed
+
+-   Set timeout on all requests
 
 ## [0.14.11][] - 2024-10-03
 
