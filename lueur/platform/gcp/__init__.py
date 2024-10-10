@@ -1,7 +1,7 @@
 # mypy: disable-error-code="func-returns-value"
 import asyncio
 import logging
-from typing import Any
+from typing import Any, Final, Literal, cast
 
 from google.oauth2._service_account_async import Credentials
 
@@ -34,149 +34,221 @@ from lueur.platform.gcp.vpc import explore_vpc
 __all__ = ["explore", "expand_links"]
 logger = logging.getLogger("lueur.lib")
 
+Targets: Final = list[
+    Literal[
+        "addresses",
+        "gke",
+        "cloudrun",
+        "lb",
+        "connector",
+        "securities",
+        "firewalls",
+        "forwardingrules",
+        "health_checks",
+        "target_proxies",
+        "storage",
+        "dns",
+        "memorystore",
+        "compute",
+        "vpc",
+        "monitoring",
+    ]
+]
+
 
 async def explore(
-    project: str, location: str | None = None, creds: Credentials | None = None
+    project: str,
+    location: str | None = None,
+    creds: Credentials | None = None,
+    include: list[str] = cast(list[str], Targets),
+    include_global: bool = True,
+    include_regional: bool = True,
 ) -> Discovery:
     resources = []
     tasks: list[asyncio.Task] = []
 
     async with asyncio.TaskGroup() as tg:
-        if location:
-            tasks.append(
-                tg.create_task(
-                    explore_addresses(project, location, creds),
-                    name="explore_addresses",
+        if include_regional and location:
+            if "addresses" in include:
+                tasks.append(
+                    tg.create_task(
+                        explore_addresses(project, location, creds),
+                        name="explore_addresses",
+                    )
                 )
-            )
-            tasks.append(
-                tg.create_task(
-                    explore_gke(project, location, creds), name="explore_gke"
+
+            if "gke" in include:
+                tasks.append(
+                    tg.create_task(
+                        explore_gke(project, location, creds),
+                        name="explore_gke",
+                    )
                 )
-            )
-            tasks.append(
-                tg.create_task(
-                    explore_cloudrun(project, location, creds),
-                    name="explore_cloudrun",
+
+            if "cloudrun" in include:
+                tasks.append(
+                    tg.create_task(
+                        explore_cloudrun(project, location, creds),
+                        name="explore_cloudrun",
+                    )
                 )
-            )
-            tasks.append(
-                tg.create_task(
-                    explore_lb(project, location, creds), name="explore_lb"
+
+            if "lb" in include:
+                tasks.append(
+                    tg.create_task(
+                        explore_lb(project, location, creds), name="explore_lb"
+                    )
                 )
-            )
-            tasks.append(
-                tg.create_task(
-                    explore_connector(project, location, creds),
-                    name="explore_connector",
+
+            if "connector" in include:
+                tasks.append(
+                    tg.create_task(
+                        explore_connector(project, location, creds),
+                        name="explore_connector",
+                    )
                 )
-            )
-            tasks.append(
-                tg.create_task(
-                    explore_securities(project, location, creds),
-                    name="explore_securities",
+
+            if "securities" in include:
+                tasks.append(
+                    tg.create_task(
+                        explore_securities(project, location, creds),
+                        name="explore_securities",
+                    )
                 )
-            )
-            tasks.append(
-                tg.create_task(
-                    explore_firewalls(project, location, creds),
-                    name="explore_firewalls",
+
+            if "firewalls" in include:
+                tasks.append(
+                    tg.create_task(
+                        explore_firewalls(project, location, creds),
+                        name="explore_firewalls",
+                    )
                 )
-            )
-            tasks.append(
-                tg.create_task(
-                    explore_forwardingrules(project, location, creds),
-                    name="explore_forwardingrules",
+
+            if "forwardingrules" in include:
+                tasks.append(
+                    tg.create_task(
+                        explore_forwardingrules(project, location, creds),
+                        name="explore_forwardingrules",
+                    )
                 )
-            )
-            tasks.append(
-                tg.create_task(
-                    explore_health_checks(project, location, creds),
-                    name="explore_health_checks",
+
+            if "health_checks" in include:
+                tasks.append(
+                    tg.create_task(
+                        explore_health_checks(project, location, creds),
+                        name="explore_health_checks",
+                    )
                 )
-            )
-            tasks.append(
-                tg.create_task(
-                    explore_target_proxies(project, location, creds),
-                    name="explore_target_proxies",
+
+            if "target_proxies" in include:
+                tasks.append(
+                    tg.create_task(
+                        explore_target_proxies(project, location, creds),
+                        name="explore_target_proxies",
+                    )
                 )
-            )
-        else:
-            tasks.append(
-                tg.create_task(
-                    explore_addresses(project, None, creds),
-                    name="explore_addresses",
+        elif include_global:
+            if "addresses" in include:
+                tasks.append(
+                    tg.create_task(
+                        explore_addresses(project, None, creds),
+                        name="explore_global_addresses",
+                    )
                 )
-            )
-            tasks.append(
-                tg.create_task(
-                    explore_sql(project, creds), name="explore_global_sql"
+
+            if "sql" in include:
+                tasks.append(
+                    tg.create_task(
+                        explore_sql(project, creds), name="explore_global_sql"
+                    )
                 )
-            )
-            tasks.append(
-                tg.create_task(
-                    explore_lb(project, None, creds), name="explore_global_lb"
+
+            if "lb" in include:
+                tasks.append(
+                    tg.create_task(
+                        explore_lb(project, None, creds),
+                        name="explore_global_lb",
+                    )
                 )
-            )
-            tasks.append(
-                tg.create_task(
-                    explore_vpc(project, creds), name="explore_global_vpc"
+
+            if "vpc" in include:
+                tasks.append(
+                    tg.create_task(
+                        explore_vpc(project, creds), name="explore_global_vpc"
+                    )
                 )
-            )
-            tasks.append(
-                tg.create_task(
-                    explore_monitoring(project, creds),
-                    name="explore_global_monitoring",
+
+            if "monitoring" in include:
+                tasks.append(
+                    tg.create_task(
+                        explore_monitoring(project, creds),
+                        name="explore_global_monitoring",
+                    )
                 )
-            )
-            tasks.append(
-                tg.create_task(
-                    explore_securities(project, None, creds),
-                    name="explore_global_securities",
+
+            if "securities" in include:
+                tasks.append(
+                    tg.create_task(
+                        explore_securities(project, None, creds),
+                        name="explore_global_securities",
+                    )
                 )
-            )
-            tasks.append(
-                tg.create_task(
-                    explore_firewalls(project, None, creds),
-                    name="explore_firewalls",
+
+            if "firewalls" in include:
+                tasks.append(
+                    tg.create_task(
+                        explore_firewalls(project, None, creds),
+                        name="explore_global_firewalls",
+                    )
                 )
-            )
-            tasks.append(
-                tg.create_task(
-                    explore_health_checks(project, None, creds),
-                    name="explore_health_checks",
+
+            if "health_checks" in include:
+                tasks.append(
+                    tg.create_task(
+                        explore_health_checks(project, None, creds),
+                        name="explore_global_health_checks",
+                    )
                 )
-            )
-            tasks.append(
-                tg.create_task(
-                    explore_target_proxies(project, None, creds),
-                    name="explore_target_proxies",
+
+            if "target_proxies" in include:
+                tasks.append(
+                    tg.create_task(
+                        explore_target_proxies(project, None, creds),
+                        name="explore_global_target_proxies",
+                    )
                 )
-            )
-            tasks.append(
-                tg.create_task(
-                    explore_storage(project, creds),
-                    name="explore_storage",
+
+            if "storage" in include:
+                tasks.append(
+                    tg.create_task(
+                        explore_storage(project, creds),
+                        name="explore_global_storage",
+                    )
                 )
-            )
-            tasks.append(
-                tg.create_task(
-                    explore_compute(project, creds),
-                    name="explore_compute",
+
+            if "compute" in include:
+                tasks.append(
+                    tg.create_task(
+                        explore_compute(project, creds),
+                        name="explore_global_compute",
+                    )
                 )
-            )
-            tasks.append(
-                tg.create_task(
-                    explore_memorystore(project, creds),
-                    name="explore_memorystore",
+
+            if "memorystore" in include:
+                tasks.append(
+                    tg.create_task(
+                        explore_memorystore(project, creds),
+                        name="explore_global_memorystore",
+                    )
                 )
-            )
-            tasks.append(
-                tg.create_task(
-                    explore_dns(project, creds),
-                    name="explore_dns",
+
+            if "dns" in include:
+                tasks.append(
+                    tg.create_task(
+                        explore_dns(project, creds),
+                        name="explore_global_dns",
+                    )
                 )
-            )
 
         [t.add_done_callback(task_done) for t in tasks]
 

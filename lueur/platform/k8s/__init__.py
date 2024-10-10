@@ -1,6 +1,6 @@
 import asyncio
 import secrets
-from typing import Any
+from typing import Any, Final, Literal, cast
 
 from lueur.make_id import make_id
 from lueur.models import Discovery, Meta
@@ -23,20 +23,43 @@ from lueur.platform.k8s.service import explore_service
 
 __all__ = ["explore", "expand_links"]
 
+Targets: Final = list[
+    Literal[
+        "node",
+        "pod",
+        "replicaset",
+        "deployment",
+        "ingress",
+        "service",
+        "network_policy",
+        "gateway",
+    ]
+]
 
-async def explore() -> Discovery:
+
+async def explore(
+    include: list[str] = cast(list[str], Targets),
+) -> Discovery:
     resources = []
     tasks: list[asyncio.Task] = []
 
     async with asyncio.TaskGroup() as tg:
-        tasks.append(tg.create_task(explore_node()))
-        tasks.append(tg.create_task(explore_pod()))
-        tasks.append(tg.create_task(explore_replicaset()))
-        tasks.append(tg.create_task(explore_deployment()))
-        tasks.append(tg.create_task(explore_ingress()))
-        tasks.append(tg.create_task(explore_service()))
-        tasks.append(tg.create_task(explore_network_policy()))
-        tasks.append(tg.create_task(explore_gateway()))
+        if "node" in include:
+            tasks.append(tg.create_task(explore_node()))
+        if "pod" in include:
+            tasks.append(tg.create_task(explore_pod()))
+        if "replicaset" in include:
+            tasks.append(tg.create_task(explore_replicaset()))
+        if "deployment" in include:
+            tasks.append(tg.create_task(explore_deployment()))
+        if "ingress" in include:
+            tasks.append(tg.create_task(explore_ingress()))
+        if "service" in include:
+            tasks.append(tg.create_task(explore_service()))
+        if "network_policy" in include:
+            tasks.append(tg.create_task(explore_network_policy()))
+        if "gateway" in include:
+            tasks.append(tg.create_task(explore_gateway()))
 
     for task in tasks:
         result = task.result()

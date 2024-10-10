@@ -2,7 +2,16 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.14.15..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.15.0..HEAD
+
+## [0.15.0][] - 2024-10-10
+
+[0.15.0]: https://github.com/lueurdev/lueur/compare/0.14.15..0.15.0
+
+### Added
+
+-   Filtering mechanism to exclude some GCP resources
+-   Filtering mechanism to exclude some Kubernetes resources
 
 ## [0.14.15][] - 2024-10-03
 
