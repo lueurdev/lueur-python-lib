@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.15.0..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.15.1..HEAD
+
+## [0.15.1][] - 2024-10-10
+
+[0.15.1]: https://github.com/lueurdev/lueur/compare/0.15.0..0.15.1
+
+### Added
+
+* Ensures when filter is not set, we allow all targets
 
 ## [0.15.0][] - 2024-10-10
 

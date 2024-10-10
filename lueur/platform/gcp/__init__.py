@@ -34,7 +34,7 @@ from lueur.platform.gcp.vpc import explore_vpc
 __all__ = ["explore", "expand_links"]
 logger = logging.getLogger("lueur.lib")
 
-Targets: Final = list[
+Targets: Final = tuple[
     Literal[
         "addresses",
         "gke",
@@ -60,12 +60,15 @@ async def explore(
     project: str,
     location: str | None = None,
     creds: Credentials | None = None,
-    include: list[str] = cast(list[str], Targets),
+    include: tuple[str] | None = cast(tuple[str], Targets),
     include_global: bool = True,
     include_regional: bool = True,
 ) -> Discovery:
     resources = []
     tasks: list[asyncio.Task] = []
+
+    if include is None:
+        include = cast(tuple[str], Targets)
 
     async with asyncio.TaskGroup() as tg:
         if include_regional and location:

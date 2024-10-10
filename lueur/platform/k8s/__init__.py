@@ -23,7 +23,7 @@ from lueur.platform.k8s.service import explore_service
 
 __all__ = ["explore", "expand_links"]
 
-Targets: Final = list[
+Targets: Final = tuple[
     Literal[
         "node",
         "pod",
@@ -38,10 +38,13 @@ Targets: Final = list[
 
 
 async def explore(
-    include: list[str] = cast(list[str], Targets),
+    include: tuple[str] | None = cast(tuple[str], Targets),
 ) -> Discovery:
     resources = []
     tasks: list[asyncio.Task] = []
+
+    if include is None:
+        include = cast(tuple[str], Targets)
 
     async with asyncio.TaskGroup() as tg:
         if "node" in include:
