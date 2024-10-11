@@ -1,7 +1,7 @@
 # mypy: disable-error-code="func-returns-value"
 import asyncio
 import logging
-from typing import Any, Final, Literal, cast
+from typing import Any, Literal, Sequence, cast
 
 from google.oauth2._service_account_async import Credentials
 
@@ -34,33 +34,50 @@ from lueur.platform.gcp.vpc import explore_vpc
 __all__ = ["explore", "expand_links"]
 logger = logging.getLogger("lueur.lib")
 
-Targets: Final = tuple[
-    Literal[
-        "addresses",
-        "gke",
-        "cloudrun",
-        "lb",
-        "connector",
-        "securities",
-        "firewalls",
-        "forwardingrules",
-        "health_checks",
-        "target_proxies",
-        "storage",
-        "dns",
-        "memorystore",
-        "compute",
-        "vpc",
-        "monitoring",
-    ]
-]
+Targets = (
+    "addresses",
+    "gke",
+    "cloudrun",
+    "lb",
+    "connector",
+    "securities",
+    "firewalls",
+    "forwardingrules",
+    "health_checks",
+    "target_proxies",
+    "storage",
+    "dns",
+    "memorystore",
+    "compute",
+    "vpc",
+    "monitoring",
+)
 
 
 async def explore(
     project: str,
     location: str | None = None,
     creds: Credentials | None = None,
-    include: tuple[str] | None = None,
+    include: Sequence[
+        Literal[
+            "addresses",
+            "gke",
+            "cloudrun",
+            "lb",
+            "connector",
+            "securities",
+            "firewalls",
+            "forwardingrules",
+            "health_checks",
+            "target_proxies",
+            "storage",
+            "dns",
+            "memorystore",
+            "compute",
+            "vpc",
+            "monitoring"
+        ]
+    ] | None = None,
     include_global: bool = True,
     include_regional: bool = True,
 ) -> Discovery:
@@ -68,7 +85,7 @@ async def explore(
     tasks: list[asyncio.Task] = []
 
     if include is None:
-        include = cast(tuple[str], Targets)
+        include = cast(Sequence, Targets)
 
     async with asyncio.TaskGroup() as tg:
         if include_regional and location:

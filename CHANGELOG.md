@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.15.2..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.15.3..HEAD
+
+## [0.15.3][] - 2024-10-11
+
+[0.15.3]: https://github.com/lueurdev/lueur/compare/0.15.2..0.15.3
+
+### Fixed
+
+* Typing for filters
 
 ## [0.15.2][] - 2024-10-11
 

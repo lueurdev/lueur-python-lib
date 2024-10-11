@@ -1,6 +1,6 @@
 import asyncio
 import secrets
-from typing import Any, Final, Literal, cast
+from typing import Any, Literal, Sequence, cast
 
 from lueur.make_id import make_id
 from lueur.models import Discovery, Meta
@@ -23,28 +23,38 @@ from lueur.platform.k8s.service import explore_service
 
 __all__ = ["explore", "expand_links"]
 
-Targets: Final = tuple[
-    Literal[
-        "node",
-        "pod",
-        "replicaset",
-        "deployment",
-        "ingress",
-        "service",
-        "network_policy",
-        "gateway",
-    ]
-]
+Targets = (
+    "node",
+    "pod",
+    "replicaset",
+    "deployment",
+    "ingress",
+    "service",
+    "network_policy",
+    "gateway",
+)
 
 
 async def explore(
-    include: tuple[str] | None = None,
+    include: Sequence[
+        Literal[
+            "node",
+            "pod",
+            "replicaset",
+            "deployment",
+            "ingress",
+            "service",
+            "network_policy",
+            "gateway",
+        ]
+    ]
+    | None = None,
 ) -> Discovery:
     resources = []
     tasks: list[asyncio.Task] = []
 
     if include is None:
-        include = cast(tuple[str], Targets)
+        include = cast(Sequence, Targets)
 
     async with asyncio.TaskGroup() as tg:
         if "node" in include:
