@@ -26,13 +26,18 @@ async def explore_pod() -> list[Resource]:
 # Private functions
 ###############################################################################
 async def explore_pods(c: AsyncClient) -> list[Resource]:
-    response = await c.execute("list_pod_for_all_namespaces")
-
-    pods = msgspec.json.decode(response.data)
+    f = "list_pod_for_all_namespaces"
+    response = await c.execute(f)
 
     if response.status == 403:
-        logger.warning(f"K8S API server access failure: {pods}")
+        logger.warning("Kubernetes API server failed authentication")
         return []
+
+    if response.status == 404:
+        logger.warning(f"Kubernetes API server '{f}' not found")
+        return []
+
+    pods = msgspec.json.decode(response.data)
 
     if "items" not in pods:
         logger.warning(f"No pods found: {pods}")

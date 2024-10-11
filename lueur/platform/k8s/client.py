@@ -43,12 +43,12 @@ class AsyncClient:
             f = getattr(self.inst, func)
             try:
                 return f(*args, _preload_content=False, **kwargs)
-            except client.ApiException:
+            except client.ApiException as x:
                 logger.debug(
                     "Kubernetes client execution error", exc_info=True
                 )
 
-                raise
+                return x
 
         return await asyncio.to_thread(_run, *args, **kwargs)
 

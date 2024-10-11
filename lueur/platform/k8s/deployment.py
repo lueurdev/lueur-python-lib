@@ -29,13 +29,18 @@ async def explore_deployment() -> list[Resource]:
 # Private functions
 ###############################################################################
 async def explore_deployments(c: AsyncClient) -> list[Resource]:
-    response = await c.execute("list_deployment_for_all_namespaces")
-
-    deployments = msgspec.json.decode(response.data)
+    f = "list_deployment_for_all_namespaces"
+    response = await c.execute(f)
 
     if response.status == 403:
-        logger.warning(f"K8S API server access failure: {deployments}")
+        logger.warning("Kubernetes API server failed authentication")
         return []
+
+    if response.status == 404:
+        logger.warning(f"Kubernetes API server '{f}' not found")
+        return []
+
+    deployments = msgspec.json.decode(response.data)
 
     if "items" not in deployments:
         logger.warning(f"No deployments found: {deployments}")

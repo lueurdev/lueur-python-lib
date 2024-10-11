@@ -26,13 +26,18 @@ async def explore_network_policy() -> list[Resource]:
 # Private functions
 ###############################################################################
 async def explore_network_policies(c: AsyncClient) -> list[Resource]:
-    response = await c.execute("list_network_policy_for_all_namespaces")
-
-    policies = msgspec.json.decode(response.data)
+    f = "list_network_policy_for_all_namespaces"
+    response = await c.execute(f)
 
     if response.status == 403:
-        logger.warning(f"K8S API server access failure: {policies}")
+        logger.warning("Kubernetes API server failed authentication")
         return []
+
+    if response.status == 404:
+        logger.warning(f"Kubernetes API server '{f}' not found")
+        return []
+
+    policies = msgspec.json.decode(response.data)
 
     if "items" not in policies:
         logger.warning(f"No network policies found: {policies}")

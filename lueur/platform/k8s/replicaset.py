@@ -29,13 +29,18 @@ async def explore_replicaset() -> list[Resource]:
 # Private functions
 ###############################################################################
 async def explore_replicasets(c: AsyncClient) -> list[Resource]:
-    response = await c.execute("list_replica_set_for_all_namespaces")
-
-    replicasets = msgspec.json.decode(response.data)
+    f = "list_replica_set_for_all_namespaces"
+    response = await c.execute(f)
 
     if response.status == 403:
-        logger.warning(f"K8S API server access failure: {replicasets}")
+        logger.warning("Kubernetes API server failed authentication")
         return []
+
+    if response.status == 404:
+        logger.warning(f"Kubernetes API server '{f}' not found")
+        return []
+
+    replicasets = msgspec.json.decode(response.data)
 
     if "items" not in replicasets:
         logger.warning(f"No replicasets found: {replicasets}")
