@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.15.3..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.15.4..HEAD
+
+## [0.15.4][] - 2024-10-11
+
+[0.15.4]: https://github.com/lueurdev/lueur/compare/0.15.3..0.15.4
+
+### Fixed
+
+* Switch from `status_code` to `status` on the Kubernetes reponse object
 
 ## [0.15.3][] - 2024-10-11
 

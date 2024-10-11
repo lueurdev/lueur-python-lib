@@ -30,7 +30,7 @@ async def explore_network_policies(c: AsyncClient) -> list[Resource]:
 
     policies = msgspec.json.decode(response.data)
 
-    if response.status_code == 403:  # type: ignore
+    if response.status == 403:
         logger.warning(f"K8S API server access failure: {policies}")
         return []
 

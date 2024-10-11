@@ -33,7 +33,7 @@ async def explore_replicasets(c: AsyncClient) -> list[Resource]:
 
     replicasets = msgspec.json.decode(response.data)
 
-    if response.status_code == 403:  # type: ignore
+    if response.status == 403:
         logger.warning(f"K8S API server access failure: {replicasets}")
         return []
 
