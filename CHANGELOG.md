@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.15.6..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.15.7..HEAD
+
+## [0.15.7][] - 2024-10-11
+
+[0.15.7]: https://github.com/lueurdev/lueur/compare/0.15.6..0.15.7
+
+### Changed
+
+* Better handling of common error responses
 
 ## [0.15.6][] - 2024-10-11
 

@@ -101,19 +101,24 @@ async def explore_namespaced_gateways(
 async def explore_namespaced_http_routes(
     c: AsyncClient, ns: str, api_version: str = "v1"
 ) -> list[Resource]:
+    f = "list_namespaced_custom_object"
     response = await c.execute(
-        "list_namespaced_custom_object",
+        f,
         group="gateway.networking.k8s.io",
         version=api_version,
         plural="HTTPRoutes",
         namespace=ns,
     )
 
-    routes = msgspec.json.decode(response.data)
-
     if response.status == 403:
-        logger.warning(f"K8S API server access failure: {routes}")
+        logger.warning("Kubernetes API server failed authentication")
         return []
+
+    if response.status == 404:
+        logger.warning(f"Kubernetes API server '{f}' not found")
+        return []
+
+    routes = msgspec.json.decode(response.data)
 
     if "items" not in routes:
         logger.warning(f"No gateway routes found: {routes}")
