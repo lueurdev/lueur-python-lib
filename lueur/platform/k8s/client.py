@@ -1,4 +1,5 @@
 import asyncio
+import logging
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from typing import Any, Type
@@ -7,6 +8,7 @@ from kubernetes import client, config
 from urllib3.response import HTTPResponse
 
 __all__ = ["Client", "AsyncClient"]
+logger = logging.getLogger("lueur.lib")
 
 
 class AsyncClient:
@@ -41,8 +43,12 @@ class AsyncClient:
             f = getattr(self.inst, func)
             try:
                 return f(*args, _preload_content=False, **kwargs)
-            except client.ApiException as x:
-                return x
+            except client.ApiException:
+                logger.debug(
+                    "Kubernetes client execution error", exc_info=True
+                )
+
+                raise
 
         return await asyncio.to_thread(_run, *args, **kwargs)
 

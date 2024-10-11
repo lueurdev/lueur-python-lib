@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.15.4..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.15.5..HEAD
+
+## [0.15.5][] - 2024-10-11
+
+[0.15.5]: https://github.com/lueurdev/lueur/compare/0.15.4..0.15.5
+
+### Changed
+
+* Tracing and raising Kubernetes client API error
 
 ## [0.15.4][] - 2024-10-11
 
