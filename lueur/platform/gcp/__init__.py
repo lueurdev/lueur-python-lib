@@ -60,7 +60,7 @@ async def explore(
     project: str,
     location: str | None = None,
     creds: Credentials | None = None,
-    include: tuple[str] | None = cast(tuple[str], Targets),
+    include: tuple[str] | None = None,
     include_global: bool = True,
     include_regional: bool = True,
 ) -> Discovery:

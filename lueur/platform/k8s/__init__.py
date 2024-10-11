@@ -38,7 +38,7 @@ Targets: Final = tuple[
 
 
 async def explore(
-    include: tuple[str] | None = cast(tuple[str], Targets),
+    include: tuple[str] | None = None,
 ) -> Discovery:
     resources = []
     tasks: list[asyncio.Task] = []
