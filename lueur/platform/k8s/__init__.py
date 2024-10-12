@@ -4,6 +4,7 @@ from typing import Any, Literal, Sequence, cast
 
 from lueur.make_id import make_id
 from lueur.models import Discovery, Meta
+from lueur.platform.k8s.dependency import explore_flow_dependencies
 from lueur.platform.k8s.deployment import (
     expand_links as deployment_expand_links,
 )
@@ -32,6 +33,7 @@ Targets = (
     "service",
     "network_policy",
     "gateway",
+    "dependency",
 )
 
 
@@ -46,9 +48,11 @@ async def explore(
             "service",
             "network_policy",
             "gateway",
+            "dependency",
         ]
     ]
     | None = None,
+    dependency_endpoint: str | None = None,
 ) -> Discovery:
     resources = []
     tasks: list[asyncio.Task] = []
@@ -73,6 +77,10 @@ async def explore(
             tasks.append(tg.create_task(explore_network_policy()))
         if "gateway" in include:
             tasks.append(tg.create_task(explore_gateway()))
+        if dependency_endpoint and "dependency" in include:
+            tasks.append(
+                tg.create_task(explore_flow_dependencies(dependency_endpoint))
+            )
 
     for task in tasks:
         result = task.result()

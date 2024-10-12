@@ -75,9 +75,10 @@ async def explore(
             "memorystore",
             "compute",
             "vpc",
-            "monitoring"
+            "monitoring",
         ]
-    ] | None = None,
+    ]
+    | None = None,
     include_global: bool = True,
     include_regional: bool = True,
 ) -> Discovery:

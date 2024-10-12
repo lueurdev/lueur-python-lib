@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.15.7..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.16.0..HEAD
+
+## [0.16.0][] - 2024-10-12
+
+[0.16.0]: https://github.com/lueurdev/lueur/compare/0.15.7..0.16.0
+
+### Added
+
+* Dependency discovery through [k8packet](https://github.com/k8spacket)
 
 ## [0.15.7][] - 2024-10-11
 

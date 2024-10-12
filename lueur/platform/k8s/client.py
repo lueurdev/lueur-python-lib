@@ -44,9 +44,7 @@ class AsyncClient:
             try:
                 return f(*args, _preload_content=False, **kwargs)
             except client.ApiException as x:
-                logger.debug(
-                    "Kubernetes client execution error", exc_info=True
-                )
+                logger.debug("Kubernetes client execution error", exc_info=True)
 
                 return x
 
