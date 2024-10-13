@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.16.0..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.17.0..HEAD
+
+## [0.17.0][] - 2024-10-13
+
+[0.17.0]: https://github.com/lueurdev/lueur/compare/0.16.0..0.17.0
+
+### Added
+
+* Conections to the dependnecy flow structure
 
 ## [0.16.0][] - 2024-10-12
 
