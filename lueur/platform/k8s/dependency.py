@@ -40,7 +40,7 @@ async def explore_k8packet(k8packet_address: str) -> Resource | None:
 
         data = msgspec.json.decode(response.content)
 
-        response = await c.get("/nodegraph/connnections")
+        response = await c.get("/nodegraph/connections")
 
         if response.status_code == 404:
             logger.warning("k8spacket not found. Please install k8packet")
