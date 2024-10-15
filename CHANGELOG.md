@@ -4,6 +4,10 @@
 
 [Unreleased]: https://github.com/lueurdev/lueur/compare/0.18.0..HEAD
 
+### Changed
+
+- Improved links based on communication flow
+
 ## [0.18.0][] - 2024-10-13
 
 [0.18.0]: https://github.com/lueurdev/lueur/compare/0.17.1..0.18.0

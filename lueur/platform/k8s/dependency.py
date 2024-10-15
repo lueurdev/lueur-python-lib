@@ -1,8 +1,9 @@
 # mypy: disable-error-code="call-arg,index"
 import logging
-from typing import Any
+from typing import Any, Literal
 
 import httpx
+import jsonpath
 import msgspec
 
 from lueur.links import add_link
@@ -69,12 +70,21 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
         serialized,
         "$.resources[?@.meta.kind=='dependency' && @.meta.platform=='k8s']",  # noqa: E501
     ):
+        graph = dependency.value["struct"]["graph"]
         seen_resources = {}
-        for edge in dependency.value["struct"]["graph"]["edges"]:
+
+        nodes = {}
+        for node in graph["nodes"]:
+            nodes[node["id"]] = node["title"]
+
+        for edge in graph["edges"]:
             source_ip = edge["source"]
             target_ip = edge["target"]
-            src_name = edge["srcName"]
-            dst_name = edge["dstName"]
+            src_name = nodes.get(source_ip)
+            dst_name = nodes.get(target_ip)
+
+            if not src_name or not dst_name:
+                continue
 
             if not src_name.startswith(("pod.", "svc.", "node.")):
                 continue
@@ -82,37 +92,55 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
             if not dst_name.startswith(("pod.", "svc.", "node.")):
                 continue
 
-            source_resource = None
+            source_resource: jsonpath.JSONPathMatch | None = None
+            source_type: Literal["pod", "node"] = "pod"
             if src_name.startswith("pod."):
+                source_type = "pod"
                 if source_ip not in seen_resources:
-                    p = f"$.resources[?@.meta.kind=='pod'].struct.status[?@.podIP=='{source_ip}']"  # noqa: E501
+                    p = f"$.resources[?@.meta.kind=='pod' && @.struct.status.podIP=='{source_ip}']"  # noqa: E501
                     source_resource = next(  # type: ignore
-                        iter_resource(serialized, p)
-                    ).parent.parent.parent
-                    seen_resources[source_ip] = source_resource
-                else:
-                    source_resource = seen_resources[source_ip]
+                        iter_resource(serialized, p), None
+                    )
+
+                    if source_resource:
+                        seen_resources[source_ip] = source_resource
+
+                if not source_resource:
+                    source_resource = seen_resources.get(source_ip)
 
             if src_name.startswith("node."):
+                source_type = "node"
                 if source_ip not in seen_resources:
-                    p = f"$.resources[?@.meta.kind=='node'].struct.status.addresses.*.[?@.address=='{source_ip}']"  # noqa: E501
+                    p = f"$.resources[?@.meta.kind=='node'].struct.status.addresses[?@.address=='{source_ip}']"  # noqa: E501
                     source_resource = next(  # type: ignore
-                        iter_resource(serialized, p)
-                    ).parent.parent.parent.parent.parent.parent
-                    seen_resources[source_ip] = source_resource
-                else:
-                    source_resource = seen_resources[source_ip]
+                        iter_resource(serialized, p), None
+                    )
+
+                    if source_resource:
+                        source_resource = (
+                            source_resource.parent.parent.parent.parent  # type: ignore
+                        )
+                        seen_resources[source_ip] = source_resource  # type: ignore
+
+                if not source_resource:
+                    source_resource = seen_resources.get(source_ip)
+
+            if not source_resource:
+                continue
 
             if dst_name.startswith("pod."):
                 target_pod = None
                 if target_ip not in seen_resources:
-                    p = f"$.resources[?@.meta.kind=='pod'].struct.status[?@.podIP=='{target_ip}']"  # noqa: E501
+                    p = f"$.resources[?@.meta.kind=='pod' && @.struct.status.podIP=='{target_ip}']"  # noqa: E501
                     target_pod = next(  # type: ignore
-                        iter_resource(serialized, p)
-                    ).parent.parent.parent
-                    seen_resources[target_ip] = target_pod
-                else:
-                    target_pod = seen_resources[target_ip]
+                        iter_resource(serialized, p), None
+                    )
+
+                    if target_pod:
+                        seen_resources[target_ip] = target_pod
+
+                if not target_pod:
+                    target_pod = seen_resources.get(target_ip)
 
                 if target_pod:
                     add_link(
@@ -131,22 +159,25 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                         target_pod.obj["id"],
                         Link(
                             direction="in",
-                            kind="pod",
-                            path=source_resource.path,  # type: ignore
-                            pointer=str(source_resource.pointer()),  # type: ignore
+                            kind=source_type,
+                            path=source_resource.path,
+                            pointer=str(source_resource.pointer()),
                         ),
                     )
 
             if dst_name.startswith("svc."):
                 target_svc = None
                 if target_ip not in seen_resources:
-                    p = f"$.resources[?@.meta.kind=='service'].struct.spec[?@.clusterIP=='{target_ip}']"  # noqa: E501
+                    p = f"$.resources[?@.meta.kind=='service' && @.struct.spec.clusterIP=='{target_ip}']"  # noqa: E501
                     target_svc = next(  # type: ignore
-                        iter_resource(serialized, p)
-                    ).parent.parent.parent
-                    seen_resources[target_ip] = target_svc
-                else:
-                    target_svc = seen_resources[target_ip]
+                        iter_resource(serialized, p), None
+                    )
+
+                    if target_svc:
+                        seen_resources[target_ip] = target_svc
+
+                if not target_svc:
+                    target_svc = seen_resources.get(target_ip)
 
                 if target_svc:
                     add_link(
@@ -155,8 +186,8 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                         Link(
                             direction="out",
                             kind="service",
-                            path=source_resource.path,  # type: ignore
-                            pointer=str(source_resource.pointer()),  # type: ignore
+                            path=source_resource.path,
+                            pointer=str(source_resource.pointer()),
                         ),
                     )
 
@@ -166,7 +197,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                         Link(
                             direction="in",
                             kind="pod",
-                            path=source_resource.path,  # type: ignore
-                            pointer=str(source_resource.pointer()),  # type: ignore
+                            path=source_resource.path,
+                            pointer=str(source_resource.pointer()),
                         ),
                     )
