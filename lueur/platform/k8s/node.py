@@ -84,3 +84,24 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     pointer=str(k8snode.pointer()),
                 ),
             )
+
+    for node_name in iter_resource(
+        serialized,
+        "$.resources[?@.meta.kind=='node' && @.meta.platform=='k8s'].meta.name",
+    ):
+        resource = node_name.parent.parent.obj
+        r_id = resource["id"]  # type: ignore
+        node_name = node_name.value  # type: ignore
+
+        p = f"$.resources[?@.meta.kind=='pod' && @.meta.platform=='k8s' && @.struct.spec.nodeName=='{node_name}']"  # noqa: E501
+        for pod in iter_resource(serialized, p):
+            add_link(
+                d,
+                r_id,
+                Link(
+                    direction="out",
+                    kind="pod",
+                    path=pod.path,
+                    pointer=str(pod.pointer()),
+                ),
+            )
