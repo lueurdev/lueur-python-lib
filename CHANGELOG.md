@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.17.1..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.18.0..HEAD
+
+## [0.18.0][] - 2024-10-13
+
+[0.18.0]: https://github.com/lueurdev/lueur/compare/0.17.1..0.18.0
+
+### Added
+
+- Linking from traced nodes/pods to their resources
 
 ## [0.17.1][] - 2024-10-13
 

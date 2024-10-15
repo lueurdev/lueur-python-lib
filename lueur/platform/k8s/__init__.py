@@ -4,6 +4,9 @@ from typing import Any, Literal, Sequence, cast
 
 from lueur.make_id import make_id
 from lueur.models import Discovery, Meta
+from lueur.platform.k8s.dependency import (
+    expand_links as dependency_expand_links,
+)
 from lueur.platform.k8s.dependency import explore_flow_dependencies
 from lueur.platform.k8s.deployment import (
     expand_links as deployment_expand_links,
@@ -102,3 +105,4 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
     gateway_expand_links(d, serialized)
     node_expand_links(d, serialized)
     replicaset_expand_links(d, serialized)
+    dependency_expand_links(d, serialized)
