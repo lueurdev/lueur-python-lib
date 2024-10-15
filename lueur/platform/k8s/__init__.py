@@ -18,6 +18,7 @@ from lueur.platform.k8s.ingress import explore_ingress
 from lueur.platform.k8s.network_policy import explore_network_policy
 from lueur.platform.k8s.node import expand_links as node_expand_links
 from lueur.platform.k8s.node import explore_node
+from lueur.platform.k8s.pod import expand_links as pod_expand_links
 from lueur.platform.k8s.pod import explore_pod
 from lueur.platform.k8s.replicaset import (
     expand_links as replicaset_expand_links,
@@ -104,5 +105,6 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
     deployment_expand_links(d, serialized)
     gateway_expand_links(d, serialized)
     node_expand_links(d, serialized)
+    pod_expand_links(d, serialized)
     replicaset_expand_links(d, serialized)
     dependency_expand_links(d, serialized)

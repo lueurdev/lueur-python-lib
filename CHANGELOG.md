@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.19.0..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.19.1..HEAD
+
+## [0.19.1][] - 2024-10-15
+
+[0.19.1]: https://github.com/lueurdev/lueur/compare/0.19.0..0.19.1
+
+### Fixed
+
+- Create pod links
 
 ## [0.19.0][] - 2024-10-15
 
