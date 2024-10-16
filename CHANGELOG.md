@@ -2,7 +2,16 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.19.1..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.19.2..HEAD
+
+## [0.19.2][] - 2024-10-16
+
+[0.19.2]: https://github.com/lueurdev/lueur/compare/0.19.1..0.19.2
+
+### Fixed
+
+- Kubernetes is case-sensitive for CRD so transforming HTTPRoutes into
+  httproutes
 
 ## [0.19.1][] - 2024-10-15
 
@@ -16,7 +25,7 @@
 
 [0.19.0]: https://github.com/lueurdev/lueur/compare/0.18.0..0.19.0
 
-### Changed
+### Changed
 
 - Improved links based on communication flow
 - New links from nodes to pods and vice versa

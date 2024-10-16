@@ -66,7 +66,9 @@ async def explore_namespaced_gateways(
         return []
 
     if response.status == 404:
-        logger.warning(f"Kubernetes API server '{f}' not found")
+        logger.warning(
+            f"Kubernetes Gateways ({api_version}) not found in ns '{ns}'"
+        )
         return []
 
     gateways = msgspec.json.decode(response.data)
@@ -106,12 +108,14 @@ async def explore_namespaced_http_routes(
         f,
         group="gateway.networking.k8s.io",
         version=api_version,
-        plural="HTTPRoutes",
+        plural="httproutes",
         namespace=ns,
     )
 
     if response.status == 403:
-        logger.warning("Kubernetes API server failed authentication")
+        logger.warning(
+            f"Kubernetes HTTPRoutes ({api_version}) not found in ns '{ns}'"
+        )
         return []
 
     if response.status == 404:
