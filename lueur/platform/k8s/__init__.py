@@ -24,6 +24,7 @@ from lueur.platform.k8s.replicaset import (
     expand_links as replicaset_expand_links,
 )
 from lueur.platform.k8s.replicaset import explore_replicaset
+from lueur.platform.k8s.service import expand_links as svc_expand_links
 from lueur.platform.k8s.service import explore_service
 
 __all__ = ["explore", "expand_links"]
@@ -106,5 +107,6 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
     gateway_expand_links(d, serialized)
     node_expand_links(d, serialized)
     pod_expand_links(d, serialized)
+    svc_expand_links(d, serialized)
     replicaset_expand_links(d, serialized)
     dependency_expand_links(d, serialized)

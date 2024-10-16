@@ -1,14 +1,17 @@
 # mypy: disable-error-code="call-arg,index"
 import logging
+from typing import Any
 
 import msgspec
 from kubernetes import client
 
+from lueur.links import add_link
 from lueur.make_id import make_id
-from lueur.models import K8SMeta, Resource
+from lueur.models import Discovery, K8SMeta, Link, Resource
 from lueur.platform.k8s.client import AsyncClient, Client
+from lueur.rules import iter_resource
 
-__all__ = ["explore_service"]
+__all__ = ["explore_service", "expand_links"]
 logger = logging.getLogger("lueur.lib")
 
 
@@ -62,3 +65,27 @@ async def explore_services(c: AsyncClient) -> list[Resource]:
         )
 
     return results
+
+
+def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
+    for svc_name in iter_resource(
+        serialized,
+        "$.resources[?@.meta.kind=='service' && @.meta.platform=='k8s'].meta.name",  # noqa: E501
+    ):
+        svc = svc_name.parent.parent  # type: ignore
+        r_id = svc.obj["id"]  # type: ignore
+        selectors = svc["selector"]
+        labels = " && ".join([f"@.'{k}'=='{v}'" for k, v in selectors.items()])
+
+        p = f"$.resources[?@.meta.kind=='pod' && @.struct.metadata.labels[{labels}]"  # noqa: E501
+        for pod in iter_resource(serialized, p):
+            add_link(
+                d,
+                r_id,
+                Link(
+                    direction="out",
+                    kind="pod",
+                    path=pod.path,
+                    pointer=str(pod.pointer()),
+                ),
+            )

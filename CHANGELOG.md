@@ -8,6 +8,11 @@
 
 [0.19.2]: https://github.com/lueurdev/lueur/compare/0.19.1..0.19.2
 
+### Added
+
+- Links between Gateways and their HTTPRoutes
+- Links between service and pods
+
 ### Fixed
 
 - Kubernetes is case-sensitive for CRD so transforming HTTPRoutes into
