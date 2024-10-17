@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.19.2..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.19.3..HEAD
+
+## [0.19.3][] - 2024-10-17
+
+[0.19.2]: https://github.com/lueurdev/lueur/compare/0.19.2..0.19.3
+
+### Fixed
+
+- Pod filtering by service selector labels
 
 ## [0.19.2][] - 2024-10-16
 

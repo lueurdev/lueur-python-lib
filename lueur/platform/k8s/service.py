@@ -74,10 +74,19 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
     ):
         svc = svc_name.parent.parent  # type: ignore
         r_id = svc.obj["id"]  # type: ignore
-        selectors = svc["selector"]
-        labels = " && ".join([f"@.'{k}'=='{v}'" for k, v in selectors.items()])
+        ns = svc.obj["meta"]["ns"]  # type: ignore
+        selectors = svc.obj["struct"]["spec"].get("selector")  # type: ignore
+        if not selectors:
+            continue
 
-        p = f"$.resources[?@.meta.kind=='pod' && @.struct.metadata.labels[{labels}]"  # noqa: E501
+        labels = " && ".join(
+            [
+                f"@.struct.metadata.labels.['{k}']=='{v}'"
+                for k, v in selectors.items()
+            ]
+        )  # noqa: E501
+        p = f"$.resources[?@.meta.kind=='pod' && @.meta.ns=='{ns}' && {labels}]"
+
         for pod in iter_resource(serialized, p):
             add_link(
                 d,
