@@ -210,7 +210,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
         serialized,
         "$.resources[?@.meta.kind=='httproute' && @.meta.platform=='k8s'].struct.spec.parentRefs[?@.kind=='Gateway'].name",  # noqa E501
     ):
-        r_id = gw_name.parent.parent.parent.parent.obj["id"]  # type: ignore
+        r_id = gw_name.parent.parent.parent.parent.parent.obj["id"]  # type: ignore
         name = gw_name.value
 
         p = f"$.resources[?@.meta.kind=='gateway' && @.meta.platform=='k8s' && @.meta.name=='{name}']"  # noqa E501
@@ -233,7 +233,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
         r_id = gw_name.parent.parent.obj["id"]  # type: ignore
         name = gw_name.value
 
-        p = f"$.resources[?@.meta.kind=='httproute' && @.meta.platform=='k8s'].struct.spec.parentRefs[?@.kind=='Gateway' && @.name=='{gw_name}']"  # noqa E501
+        p = f"$.resources[?@.meta.kind=='httproute' && @.meta.platform=='k8s'].struct.spec.parentRefs[?@.kind=='Gateway' && @.name=='{name}']"  # noqa E501
         for httproute in iter_resource(serialized, p):
             add_link(
                 d,
@@ -250,7 +250,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
         serialized,
         "$.resources[?@.meta.kind=='httproute' && @.meta.platform=='k8s'].struct.spec.rules.*.backendRefs[?@.kind=='Service']",  # noqa E501
     ):
-        r_id = service_refs.parent.parent.parent.parent.parent.obj["id"]  # type: ignore
+        r_id = service_refs.parent.parent.parent.parent.parent.parent.obj["id"]  # type: ignore
         svc_ref = service_refs.obj
         svc_name = svc_ref["name"]
         svc_ns = svc_ref["namespace"]

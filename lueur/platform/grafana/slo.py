@@ -13,7 +13,10 @@ __all__ = ["explore_slo", "expand_links"]
 logger = logging.getLogger("lueur.lib")
 
 
-async def explore_slo(stack_url: str, token: str,) -> list[Resource]:
+async def explore_slo(
+    stack_url: str,
+    token: str,
+) -> list[Resource]:
     resources = []
 
     async with Client(stack_url, token) as c:
