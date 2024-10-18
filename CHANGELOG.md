@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.19.3..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.20.0..HEAD
+
+## [0.20.0][] - 2024-10-18
+
+[0.20.0]: https://github.com/lueurdev/lueur/compare/0.19.3..0.20.0
+
+### Added
+
+- Initial Grafana support
 
 ## [0.19.3][] - 2024-10-17
 
