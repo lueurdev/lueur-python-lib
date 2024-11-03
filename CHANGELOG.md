@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur/compare/0.20.1..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur/compare/0.21.0..HEAD
+
+## [0.21.0][] - 2024-11-03
+
+[0.21.0]: https://github.com/lueurdev/lueur/compare/0.20.1..0.21.0
+
+### Fixed
+
+- Minor path fixed in k8s/gateway
 
 ## [0.20.1][] - 2024-10-18
 

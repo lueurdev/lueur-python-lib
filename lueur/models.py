@@ -16,6 +16,7 @@ __all__ = [
     "GCPProject",
     "K8SMeta",
     "AWSMeta",
+    "GrafanaMeta",
 ]
 
 
@@ -64,6 +65,10 @@ class K8SMeta(Meta):
 
 class AWSMeta(Meta):
     region: str | None = None
+
+
+class GrafanaMeta(Meta):
+    pass
 
 
 class Resource(BaseModel):

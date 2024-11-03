@@ -10,7 +10,7 @@ __all__ = ["Client"]
 async def Client(
     stack_url: str, token: str
 ) -> AsyncGenerator[httpx.AsyncClient, None]:
-    headers = {"Authorization": f"Bearer ${token}"}
+    headers = {"Accept": "application/json", "Authorization": f"Bearer {token}"}
 
     async with httpx.AsyncClient(
         http2=True, base_url=stack_url, headers=headers
