@@ -247,7 +247,8 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
 
     slos = {}
     for slo in iter_resource(
-        serialized, "$.resources[?@.meta.kind=='slo'].meta.name"
+        serialized,
+        "$.resources[?@.meta.kind=='slo' && @.meta.platform=='gcp'].meta.name",  # noqa E501
     ):
         r_id = slo.parent.parent.obj["id"]  # type: ignore
         slos[slo.value] = r_id
