@@ -9,6 +9,7 @@ from lueur.links import add_link
 from lueur.make_id import make_id
 from lueur.models import Discovery, K8SMeta, Link, Resource
 from lueur.platform.k8s.client import AsyncClient, Client
+from lueur.resource import filter_out_keys
 from lueur.rules import iter_resource
 
 __all__ = ["explore_gateway"]
@@ -93,7 +94,9 @@ async def explore_namespaced_gateways(
                     ns=meta["namespace"],
                     category="loadbalancer",
                 ),
-                struct=gw,
+                struct=filter_out_keys(
+                    gw, keys=[["metadata", "managedFields"]]
+                ),
             )
         )
 
@@ -168,6 +171,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="service",
                     path=svc.path,
                     pointer=str(svc.pointer()),
+                    id=svc.obj["id"],
                 ),
             )
 
@@ -183,6 +187,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                         kind="slo",
                         path=slo.path,
                         pointer=str(slo.pointer()),
+                        id=slo.obj["id"],
                     ),
                 )
 
@@ -203,6 +208,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="global-urlmap",
                     path=urlmap.path,
                     pointer=str(urlmap.pointer()),
+                    id=urlmap.obj["id"],
                 ),
             )
 
@@ -223,6 +229,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="gateway",
                     path=gw.path,
                     pointer=str(gw.pointer()),
+                    id=gw.obj["id"],
                 ),
             )
 
@@ -243,6 +250,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="httproute",
                     path=httproute.path,
                     pointer=str(httproute.pointer()),
+                    id=httproute.obj["id"],
                 ),
             )
 
@@ -265,5 +273,6 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="service",
                     path=svc.path,
                     pointer=str(svc.pointer()),
+                    id=svc.obj["id"],
                 ),
             )

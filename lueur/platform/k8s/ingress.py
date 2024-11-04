@@ -7,6 +7,7 @@ from kubernetes import client
 from lueur.make_id import make_id
 from lueur.models import K8SMeta, Resource
 from lueur.platform.k8s.client import AsyncClient, Client
+from lueur.resource import filter_out_keys
 
 __all__ = ["explore_ingress"]
 logger = logging.getLogger("lueur.lib")
@@ -57,7 +58,9 @@ async def explore_ingresses(c: AsyncClient) -> list[Resource]:
                     ns=meta["namespace"],
                     category="loadbalancer",
                 ),
-                struct=ingress,
+                struct=filter_out_keys(
+                    ingress, keys=[["metadata", "managedFields"]]
+                ),
             )
         )
 

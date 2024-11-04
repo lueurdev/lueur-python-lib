@@ -183,6 +183,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="user",
                     path=user.path,
                     pointer=str(user.pointer()),
+                    id=user.obj["id"],
                 ),
             )
 
@@ -196,6 +197,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="database",
                     path=db.path,
                     pointer=str(db.pointer()),
+                    id=db.obj["id"],
                 ),
             )
 
@@ -215,6 +217,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="network",
                     path=svc.path,
                     pointer=str(svc.pointer()),
+                    id=svc.obj["id"],
                 ),
             )
 
@@ -242,6 +245,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                             kind="alert-policy",
                             path=alertnc.path,
                             pointer=str(alertnc.pointer()),
+                            id=alertnc.obj["id"],
                         ),
                     )
 
@@ -285,5 +289,6 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                             kind="slo",
                             path=slo.path,
                             pointer=str(slo.pointer()),
+                            id=slo.obj["id"],
                         ),
                     )

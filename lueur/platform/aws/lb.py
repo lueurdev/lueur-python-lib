@@ -162,6 +162,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="listener",
                     path=listener.path,
                     pointer=str(listener.pointer()),
+                    id=listener.obj["id"],
                 ),
             )
 
@@ -183,6 +184,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="listener-rule",
                     path=rule.path,
                     pointer=str(rule.pointer()),
+                    id=rule.obj["id"],
                 ),
             )
 
@@ -206,6 +208,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="listener",
                     path=listener.path,
                     pointer=str(listener.pointer()),
+                    id=listener.obj["id"],
                 ),
             )
 
@@ -225,6 +228,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="target-group",
                     path=tg.path,
                     pointer=str(tg.pointer()),
+                    id=tg.obj["id"],
                 ),
             )
 
@@ -244,6 +248,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="subnet",
                     path=subnet.path,
                     pointer=str(subnet.pointer()),
+                    id=subnet.obj["id"],
                 ),
             )
 
@@ -264,5 +269,6 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="target-group",
                     path=tg.path,
                     pointer=str(tg.pointer()),
+                    id=tg.obj["id"],
                 ),
             )

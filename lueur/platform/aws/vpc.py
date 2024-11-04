@@ -111,5 +111,6 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="subnet",
                     path=listener.path,
                     pointer=str(listener.pointer()),
+                    id=listener.obj["id"],
                 ),
             )

@@ -7,6 +7,7 @@ from kubernetes import client
 from lueur.make_id import make_id
 from lueur.models import K8SMeta, Resource
 from lueur.platform.k8s.client import AsyncClient, Client
+from lueur.resource import filter_out_keys
 
 __all__ = ["explore_network_policy"]
 logger = logging.getLogger("lueur.lib")
@@ -57,7 +58,9 @@ async def explore_network_policies(c: AsyncClient) -> list[Resource]:
                     namespace=meta.get("namespace"),
                     category="security",
                 ),
-                struct=policy,
+                struct=filter_out_keys(
+                    policy, keys=[["metadata", "managedFields"]]
+                ),
             )
         )
 

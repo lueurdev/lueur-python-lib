@@ -151,6 +151,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                             kind="pod",
                             path=target_pod.path,
                             pointer=str(target_pod.pointer()),
+                            id=target_pod.obj["id"],
                         ),
                     )
 
@@ -162,6 +163,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                             kind=source_type,
                             path=source_resource.path,
                             pointer=str(source_resource.pointer()),
+                            id=source_resource.obj["id"],
                         ),
                     )
 
@@ -188,6 +190,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                             kind="service",
                             path=source_resource.path,
                             pointer=str(source_resource.pointer()),
+                            id=source_resource.obj["id"],
                         ),
                     )
 
@@ -199,5 +202,6 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                             kind="pod",
                             path=source_resource.path,
                             pointer=str(source_resource.pointer()),
+                            id=source_resource.obj["id"],
                         ),
                     )

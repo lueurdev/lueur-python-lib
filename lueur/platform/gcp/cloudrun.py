@@ -136,6 +136,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="service",
                     path=svc.path,
                     pointer=str(svc.pointer()),
+                    id=svc.obj["id"],  # type: ignore
                 ),
             )
 
@@ -151,6 +152,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                         kind="slo",
                         path=slo.path,
                         pointer=str(slo.pointer()),
+                        id=slo.obj["id"],  # type: ignore
                     ),
                 )
 
@@ -164,6 +166,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="regional-neg",
                     path=neg.path,
                     pointer=str(neg.pointer()),
+                    id=neg.obj["id"],  # type: ignore
                 ),
             )
 
@@ -181,6 +184,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                         kind="cloudrun-vpcaccess-connector",
                         path=svc.path,
                         pointer=str(svc.pointer()),
+                        id=svc.obj["id"],  # type: ignore
                     ),
                 )
 
@@ -198,6 +202,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                             kind="network",
                             path=nk.path,
                             pointer=str(nk.pointer()),
+                            id=nk.obj["id"],  # type: ignore
                         ),
                     )
 
@@ -212,6 +217,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                             kind="subnet",
                             path=sn.path,
                             pointer=str(sn.pointer()),
+                            id=sn.obj["id"],  # type: ignore
                         ),
                     )
 
@@ -230,6 +236,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                             kind="instance",
                             path=svc.path,
                             pointer=str(svc.pointer()),
+                            id=svc.obj["id"],  # type: ignore
                         ),
                     )
 
@@ -249,5 +256,6 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="network",
                     path=svc.path,
                     pointer=str(svc.pointer()),
+                    id=svc.obj["id"],  # type: ignore
                 ),
             )

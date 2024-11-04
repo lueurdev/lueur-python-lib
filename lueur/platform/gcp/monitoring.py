@@ -311,6 +311,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="slo",
                     path=slo.path,
                     pointer=str(slo.pointer()),
+                    id=slo.obj["id"],  # type: ignore
                 ),
             )
 
@@ -332,6 +333,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="service",
                     path=svc.path,
                     pointer=str(svc.pointer()),
+                    id=svc.obj["id"],  # type: ignore
                 ),
             )
 
@@ -352,6 +354,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="notification-channel",
                     path=nc.path,
                     pointer=str(nc.pointer()),
+                    id=nc.obj["id"],  # type: ignore
                 ),
             )
 
@@ -377,6 +380,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                         kind="alert-policy",
                         path=condition_filter.path,
                         pointer=str(condition_filter.pointer()),
+                        id=condition_filter.obj["id"],  # type: ignore
                     ),
                 )
                 break
@@ -397,5 +401,6 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="global-backend-service",
                     path=slo.path,
                     pointer=str(slo.pointer()),
+                    id=slo.obj["id"],  # type: ignore
                 ),
             )

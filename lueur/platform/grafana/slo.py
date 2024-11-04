@@ -81,6 +81,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="team",
                     path=team.path,
                     pointer=str(team.pointer()),
+                    id=team.obj["id"],
                 ),
             )
 
@@ -89,7 +90,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
         "$.resources[?@.meta.kind=='slo' && @.meta.platform=='grafana']",  # noqa: E501
     ):
         r_id = slo.obj["id"]  # type: ignore
-        slo = slo.value # type: ignore
+        slo = slo.value  # type: ignore
 
         p = f"$.resources[?@.meta.kind=='team' && @.meta.platform=='grafana' && @.meta.name=='{name}']"  # noqa: E501
         for team in iter_resource(serialized, p):
@@ -101,5 +102,6 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="team",
                     path=team.path,
                     pointer=str(team.pointer()),
+                    id=team.obj["id"],
                 ),
             )

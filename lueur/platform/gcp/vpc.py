@@ -130,6 +130,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="subnet",
                     path=subnet.path,
                     pointer=str(subnet.pointer()),
+                    id=subnet.obj["id"],
                 ),
             )
 
@@ -143,6 +144,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="global-neg",
                     path=neg.path,
                     pointer=str(neg.pointer()),
+                    id=neg.obj["id"],
                 ),
             )
 
@@ -156,6 +158,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="regional-neg",
                     path=neg.path,
                     pointer=str(neg.pointer()),
+                    id=neg.obj["id"],
                 ),
             )
 
@@ -174,5 +177,6 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="regional-neg",
                     path=neg.path,
                     pointer=str(neg.pointer()),
+                    id=neg.obj["id"],
                 ),
             )

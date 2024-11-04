@@ -9,6 +9,7 @@ from lueur.links import add_link
 from lueur.make_id import make_id
 from lueur.models import Discovery, K8SMeta, Link, Resource
 from lueur.platform.k8s.client import AsyncClient, Client
+from lueur.resource import filter_out_keys
 from lueur.rules import iter_resource
 
 __all__ = ["explore_service", "expand_links"]
@@ -60,7 +61,9 @@ async def explore_services(c: AsyncClient) -> list[Resource]:
                     ns=meta["namespace"],
                     category="network",
                 ),
-                struct=service,
+                struct=filter_out_keys(
+                    service, keys=[["metadata", "managedFields"]]
+                ),
             )
         )
 
@@ -96,5 +99,6 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="pod",
                     path=pod.path,
                     pointer=str(pod.pointer()),
+                    id=pod.obj["id"],  # type: ignore
                 ),
             )

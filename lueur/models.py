@@ -25,6 +25,7 @@ class Link(BaseModel):
     kind: str
     path: str
     pointer: str
+    id: str
 
 
 class Meta(BaseModel):

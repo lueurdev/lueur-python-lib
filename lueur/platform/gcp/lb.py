@@ -417,14 +417,16 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
             ref = used_by.get("reference")
             p = f"$.resources[?@.meta.kind=='global-urlmap' && @.struct.selfLink=='{ref}'].id"  # noqa E501
             for urlmap_id in iter_resource(serialized, p):
+                bsvc = backend_service.parent.parent
                 add_link(
                     d,
                     urlmap_id.value,
                     Link(
                         direction="out",
                         kind="global-backend-service",
-                        path=backend_service.parent.parent.path,  # type: ignore
-                        pointer=str(backend_service.parent.parent.pointer()),  # type: ignore
+                        path=bsvc.path,  # type: ignore
+                        pointer=str(bsvc.pointer()),  # type: ignore
+                        id=bsvc.obj["id"],
                     ),
                 )
 
@@ -443,6 +445,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="subnet",
                     path=subnet.path,
                     pointer=str(subnet.pointer()),
+                    id=subnet.obj["id"],
                 ),
             )
 
@@ -461,6 +464,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="network",
                     path=subnet.path,
                     pointer=str(subnet.pointer()),
+                    id=subnet.obj["id"],
                 ),
             )
 
@@ -479,6 +483,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="subnet",
                     path=subnet.path,
                     pointer=str(subnet.pointer()),
+                    id=subnet.obj["id"],
                 ),
             )
 
@@ -512,6 +517,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                                     kind="network",
                                     path=nk.path,
                                     pointer=str(nk.pointer()),
+                                    id=nk.obj["id"],
                                 ),
                             )
 
@@ -526,6 +532,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                                     kind="subnet",
                                     path=sn.path,
                                     pointer=str(sn.pointer()),
+                                    id=sn.obj["id"],
                                 ),
                             )
 
@@ -539,6 +546,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="zonal-neg",
                     path=zonal_neg.path,
                     pointer=str(zonal_neg.pointer()),
+                    id=zonal_neg.obj["id"],
                 ),
             )
 
@@ -558,6 +566,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="global-securities",
                     path=service.path,
                     pointer=str(service.pointer()),
+                    id=service.obj["id"],
                 ),
             )
 
@@ -571,6 +580,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="regional-securities",
                     path=service.path,
                     pointer=str(service.pointer()),
+                    id=service.obj["id"],
                 ),
             )
 
@@ -590,6 +600,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="regional-securities",
                     path=service.path,
                     pointer=str(service.pointer()),
+                    id=service.obj["id"],
                 ),
             )
 
@@ -608,6 +619,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="network",
                     path=subnet.path,
                     pointer=str(subnet.pointer()),
+                    id=subnet.obj["id"],
                 ),
             )
 
@@ -630,6 +642,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                         kind="cloudrun",
                         path=cloudrun.path,
                         pointer=str(cloudrun.pointer()),
+                        id=cloudrun.obj["id"],
                     ),
                 )
 
@@ -643,6 +656,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                             kind="service",
                             path=svc.path,
                             pointer=str(svc.pointer()),
+                            id=svc.obj["id"],
                         ),
                     )
 
@@ -658,6 +672,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                                 kind="slo",
                                 path=slo.path,
                                 pointer=str(slo.pointer()),
+                                id=slo.obj["id"],
                             ),
                         )
 
@@ -678,6 +693,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="global-urlmap",
                     path=urlmap.path,
                     pointer=str(urlmap.pointer()),
+                    id=urlmap.obj["id"],
                 ),
             )
 
@@ -697,5 +713,6 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="dns",
                     path=recordset.path,
                     pointer=str(recordset.pointer()),
+                    id=recordset.obj["id"],
                 ),
             )

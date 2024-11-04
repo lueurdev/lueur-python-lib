@@ -145,6 +145,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="k8s/node",
                     path=k8snode.path,
                     pointer=str(k8snode.pointer()),
+                    id=k8snode.obj["id"],  # type: ignore
                 ),
             )
 
@@ -158,6 +159,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="network",
                     path=k8snode.path,
                     pointer=str(k8snode.pointer()),
+                    id=k8snode.obj["id"],  # type: ignore
                 ),
             )
 
@@ -174,6 +176,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="subnet",
                     path=k8snode.path,
                     pointer=str(k8snode.pointer()),
+                    id=k8snode.obj["id"],  # type: ignore
                 ),
             )
 
@@ -193,6 +196,7 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="nodepool",
                     path=svc.path,
                     pointer=str(svc.pointer()),
+                    id=svc.obj["id"],  # type: ignore
                 ),
             )
 
@@ -211,5 +215,6 @@ def expand_links(d: Discovery, serialized: dict[str, Any]) -> None:
                     kind="service",
                     path=service.path,
                     pointer=str(service.pointer()),
+                    id=service.obj["id"],  # type: ignore
                 ),
             )
