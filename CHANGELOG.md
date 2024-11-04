@@ -4,6 +4,12 @@
 
 [Unreleased]: https://github.com/lueurdev/lueur/compare/0.21.0..HEAD
 
+### Added
+
+* Introducing an id of the target resource in the link. This will eventually
+  replace the path and point elements since the id will be more stable
+  and faster to lookup
+
 ## [0.21.0][] - 2024-11-03
 
 [0.21.0]: https://github.com/lueurdev/lueur/compare/0.20.1..0.21.0
