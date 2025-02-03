@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur-python-lib/compare/0.22.1..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur-python-lib/compare/0.22.2..HEAD
+
+## [0.22.2][] - 2025-02-03
+
+[0.22.2]: https://github.com/lueurdev/lueur-python-lib/compare/0.22.1..0.22.2
+
+### Fixed
+
+* Added missing credentials parameter
 
 ## [0.22.1][] - 2025-02-03
 

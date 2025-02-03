@@ -22,7 +22,7 @@ async def explore_gateway(credentials: dict[str, Any] | None) -> list[Resource]:
     async with Client(client.CoreV1Api, credentials=credentials) as c:
         namespaces = await list_all_namespaces(c)
 
-    async with Client(client.CustomObjectsApi) as c:
+    async with Client(client.CustomObjectsApi, credentials=credentials) as c:
         for ns in namespaces:
             gateways = await explore_namespaced_gateways(c, ns, "v1")
             resources.extend(gateways)
