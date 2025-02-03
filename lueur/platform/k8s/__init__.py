@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import secrets
 from typing import Any, Literal, Sequence, cast
 
@@ -28,6 +29,8 @@ from lueur.platform.k8s.service import expand_links as svc_expand_links
 from lueur.platform.k8s.service import explore_service
 
 __all__ = ["explore", "expand_links"]
+logger = logging.getLogger("lueur.lib")
+
 
 Targets = (
     "node",
@@ -67,37 +70,90 @@ async def explore(
         include = cast(Sequence, Targets)
 
     async with asyncio.TaskGroup() as tg:
-        if "node" in include:
-            tasks.append(tg.create_task(explore_node(credentials=credentials)))
-        if "pod" in include:
-            tasks.append(tg.create_task(explore_pod(credentials=credentials)))
-        if "replicaset" in include:
-            tasks.append(
-                tg.create_task(explore_replicaset(credentials=credentials))
+        try:
+            if "node" in include:
+                tasks.append(
+                    tg.create_task(explore_node(credentials=credentials))
+                )
+        except Exception:
+            logger.error("Failed to explore Kubernetes nodes", exc_info=True)
+
+        try:
+            if "pod" in include:
+                tasks.append(
+                    tg.create_task(explore_pod(credentials=credentials))
+                )
+        except Exception:
+            logger.error("Failed to explore Kubernetes pods", exc_info=True)
+
+        try:
+            if "replicaset" in include:
+                tasks.append(
+                    tg.create_task(explore_replicaset(credentials=credentials))
+                )
+        except Exception:
+            logger.error(
+                "Failed to explore Kubernetes replicasets", exc_info=True
             )
-        if "deployment" in include:
-            tasks.append(
-                tg.create_task(explore_deployment(credentials=credentials))
+
+        try:
+            if "deployment" in include:
+                tasks.append(
+                    tg.create_task(explore_deployment(credentials=credentials))
+                )
+        except Exception:
+            logger.error(
+                "Failed to explore Kubernetes deployments", exc_info=True
             )
-        if "ingress" in include:
-            tasks.append(
-                tg.create_task(explore_ingress(credentials=credentials))
+
+        try:
+            if "ingress" in include:
+                tasks.append(
+                    tg.create_task(explore_ingress(credentials=credentials))
+                )
+        except Exception:
+            logger.error(
+                "Failed to explore Kubernetes ingresses", exc_info=True
             )
-        if "service" in include:
-            tasks.append(
-                tg.create_task(explore_service(credentials=credentials))
+
+        try:
+            if "service" in include:
+                tasks.append(
+                    tg.create_task(explore_service(credentials=credentials))
+                )
+        except Exception:
+            logger.error("Failed to explore Kubernetes services", exc_info=True)
+
+        try:
+            if "network_policy" in include:
+                tasks.append(
+                    tg.create_task(
+                        explore_network_policy(credentials=credentials)
+                    )
+                )
+        except Exception:
+            logger.error(
+                "Failed to explore Kubernetes network policies", exc_info=True
             )
-        if "network_policy" in include:
-            tasks.append(
-                tg.create_task(explore_network_policy(credentials=credentials))
-            )
-        if "gateway" in include:
-            tasks.append(
-                tg.create_task(explore_gateway(credentials=credentials))
-            )
-        if dependency_endpoint and "dependency" in include:
-            tasks.append(
-                tg.create_task(explore_flow_dependencies(dependency_endpoint))
+
+        try:
+            if "gateway" in include:
+                tasks.append(
+                    tg.create_task(explore_gateway(credentials=credentials))
+                )
+        except Exception:
+            logger.error("Failed to explore Kubernetes gateways", exc_info=True)
+
+        try:
+            if dependency_endpoint and "dependency" in include:
+                tasks.append(
+                    tg.create_task(
+                        explore_flow_dependencies(dependency_endpoint)
+                    )
+                )
+        except Exception:
+            logger.error(
+                "Failed to explore Kubernetes dependencies", exc_info=True
             )
 
     for task in tasks:

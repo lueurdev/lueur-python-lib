@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur-python-lib/compare/0.22.0..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur-python-lib/compare/0.22.1..HEAD
+
+## [0.22.1][] - 2025-02-03
+
+[0.22.1]: https://github.com/lueurdev/lueur-python-lib/compare/0.22.0..0.22.1
+
+### Changed
+
+* Added exceptions management in Kubernetes explore function
 
 ## [0.22.0][] - 2025-02-03
 
