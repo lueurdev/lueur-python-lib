@@ -16,10 +16,12 @@ __all__ = ["explore_replicaset"]
 logger = logging.getLogger("lueur.lib")
 
 
-async def explore_replicaset() -> list[Resource]:
+async def explore_replicaset(
+    credentials: dict[str, Any] | None,
+) -> list[Resource]:
     resources = []
 
-    async with Client(client.AppsV1Api) as c:
+    async with Client(client.AppsV1Api, credentials=credentials) as c:
         rs = await explore_replicasets(c)
         resources.extend(rs)
 

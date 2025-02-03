@@ -1,5 +1,6 @@
 # mypy: disable-error-code="call-arg"
 import logging
+from typing import Any
 
 import msgspec
 from kubernetes import client
@@ -13,10 +14,12 @@ __all__ = ["explore_network_policy"]
 logger = logging.getLogger("lueur.lib")
 
 
-async def explore_network_policy() -> list[Resource]:
+async def explore_network_policy(
+    credentials: dict[str, Any] | None,
+) -> list[Resource]:
     resources = []
 
-    async with Client(client.NetworkingV1Api) as c:
+    async with Client(client.NetworkingV1Api, credentials=credentials) as c:
         policies = await explore_network_policies(c)
         resources.extend(policies)
 

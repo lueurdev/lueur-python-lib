@@ -16,10 +16,10 @@ __all__ = ["explore_service", "expand_links"]
 logger = logging.getLogger("lueur.lib")
 
 
-async def explore_service() -> list[Resource]:
+async def explore_service(credentials: dict[str, Any] | None) -> list[Resource]:
     resources = []
 
-    async with Client(client.CoreV1Api) as c:
+    async with Client(client.CoreV1Api, credentials=credentials) as c:
         services = await explore_services(c)
         resources.extend(services)
 

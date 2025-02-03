@@ -38,8 +38,8 @@ aws = [
 
 [project.urls]
 Documentation = "https://lueur.dev/"
-Issues = "https://github.com/lueurdev/lueur/issues"
-Source = "https://github.com/lueurdev/lueur"
+Issues = "https://github.com/lueurdev/lueur-python-lib/issues"
+Source = "https://github.com/lueurdev/lueur-python-lib"
 
 [build-system]
 requires = ["pdm-backend"]

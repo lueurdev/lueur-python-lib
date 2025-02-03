@@ -16,10 +16,10 @@ __all__ = ["explore_node"]
 logger = logging.getLogger("lueur.lib")
 
 
-async def explore_node() -> list[Resource]:
+async def explore_node(credentials: dict[str, Any] | None) -> list[Resource]:
     resources = []
 
-    async with Client(client.CoreV1Api) as c:
+    async with Client(client.CoreV1Api, credentials=credentials) as c:
         nodes = await explore_nodes(c)
         resources.extend(nodes)
 

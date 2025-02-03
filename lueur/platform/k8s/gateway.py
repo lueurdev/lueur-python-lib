@@ -16,10 +16,10 @@ __all__ = ["explore_gateway"]
 logger = logging.getLogger("lueur.lib")
 
 
-async def explore_gateway() -> list[Resource]:
+async def explore_gateway(credentials: dict[str, Any] | None) -> list[Resource]:
     resources = []
 
-    async with Client(client.CoreV1Api) as c:
+    async with Client(client.CoreV1Api, credentials=credentials) as c:
         namespaces = await list_all_namespaces(c)
 
     async with Client(client.CustomObjectsApi) as c:

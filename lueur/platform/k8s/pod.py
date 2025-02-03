@@ -16,10 +16,10 @@ __all__ = ["explore_pod"]
 logger = logging.getLogger("lueur.lib")
 
 
-async def explore_pod() -> list[Resource]:
+async def explore_pod(credentials: dict[str, Any] | None) -> list[Resource]:
     resources = []
 
-    async with Client(client.CoreV1Api) as c:
+    async with Client(client.CoreV1Api, credentials=credentials) as c:
         pods = await explore_pods(c)
         resources.extend(pods)
 

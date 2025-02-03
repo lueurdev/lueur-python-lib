@@ -58,6 +58,7 @@ async def explore(
     ]
     | None = None,
     dependency_endpoint: str | None = None,
+    credentials: dict[str, Any] | None = None,
 ) -> Discovery:
     resources = []
     tasks: list[asyncio.Task] = []
@@ -67,21 +68,33 @@ async def explore(
 
     async with asyncio.TaskGroup() as tg:
         if "node" in include:
-            tasks.append(tg.create_task(explore_node()))
+            tasks.append(tg.create_task(explore_node(credentials=credentials)))
         if "pod" in include:
-            tasks.append(tg.create_task(explore_pod()))
+            tasks.append(tg.create_task(explore_pod(credentials=credentials)))
         if "replicaset" in include:
-            tasks.append(tg.create_task(explore_replicaset()))
+            tasks.append(
+                tg.create_task(explore_replicaset(credentials=credentials))
+            )
         if "deployment" in include:
-            tasks.append(tg.create_task(explore_deployment()))
+            tasks.append(
+                tg.create_task(explore_deployment(credentials=credentials))
+            )
         if "ingress" in include:
-            tasks.append(tg.create_task(explore_ingress()))
+            tasks.append(
+                tg.create_task(explore_ingress(credentials=credentials))
+            )
         if "service" in include:
-            tasks.append(tg.create_task(explore_service()))
+            tasks.append(
+                tg.create_task(explore_service(credentials=credentials))
+            )
         if "network_policy" in include:
-            tasks.append(tg.create_task(explore_network_policy()))
+            tasks.append(
+                tg.create_task(explore_network_policy(credentials=credentials))
+            )
         if "gateway" in include:
-            tasks.append(tg.create_task(explore_gateway()))
+            tasks.append(
+                tg.create_task(explore_gateway(credentials=credentials))
+            )
         if dependency_endpoint and "dependency" in include:
             tasks.append(
                 tg.create_task(explore_flow_dependencies(dependency_endpoint))

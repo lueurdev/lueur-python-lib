@@ -12,15 +12,19 @@ logger = logging.getLogger("lueur.lib")
 
 
 class AsyncClient:
-    def __init__(self, api: Type) -> None:
+    def __init__(self, api: Type, credentials: dict[str, Any] | None) -> None:
         self.api: Type | None = api
+        self.credentials = credentials
         self.client: client.ApiClient | None = None
         self.inst = None
 
     async def __aenter__(self) -> "AsyncClient":
         assert self.api
 
-        config.load_kube_config()
+        if self.credentials is not None:
+            config.load_kube_config_from_dict(self.credentials)
+        else:
+            config.load_kube_config()
         self.client = client.ApiClient()
         self.inst = self.api(self.client)
 
@@ -52,6 +56,8 @@ class AsyncClient:
 
 
 @asynccontextmanager
-async def Client(api: Type) -> AsyncIterator[AsyncClient]:
-    async with AsyncClient(api) as c:
+async def Client(
+    api: Type, credentials: dict[str, Any] | None
+) -> AsyncIterator[AsyncClient]:
+    async with AsyncClient(api, credentials) as c:
         yield c

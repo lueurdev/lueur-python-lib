@@ -1,5 +1,6 @@
 # mypy: disable-error-code="call-arg"
 import logging
+from typing import Any
 
 import msgspec
 from kubernetes import client
@@ -13,10 +14,10 @@ __all__ = ["explore_ingress"]
 logger = logging.getLogger("lueur.lib")
 
 
-async def explore_ingress() -> list[Resource]:
+async def explore_ingress(credentials: dict[str, Any] | None) -> list[Resource]:
     resources = []
 
-    async with Client(client.NetworkingV1Api) as c:
+    async with Client(client.NetworkingV1Api, credentials=credentials) as c:
         ingresses = await explore_ingresses(c)
         resources.extend(ingresses)
 
