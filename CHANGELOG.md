@@ -2,7 +2,11 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur-python-lib/compare/0.21.0..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur-python-lib/compare/0.22.0..HEAD
+
+## [0.22.0][] - 2025-02-03
+
+[0.22.0]: https://github.com/lueurdev/lueur-python-lib/compare/0.21.0..0.22.0
 
 ### Added
 
@@ -11,6 +15,7 @@
   and faster to lookup
 * Pass the Kubernetes clients credentials as a dictionary, otherwise use the
   system credentials
+* Build and test against Python 3.13
 
 ## [0.21.0][] - 2024-11-03
 
