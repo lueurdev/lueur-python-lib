@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur-python-lib/compare/0.22.3..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur-python-lib/compare/0.22.4..HEAD
+
+## [0.22.4][] - 2025-02-05
+
+[0.22.4]: https://github.com/lueurdev/lueur-python-lib/compare/0.22.3..0.22.4
+
+### Changed
+
+* Do not list gateway/httproute in v1beta1 API
 
 ## [0.22.3][] - 2025-02-05
 

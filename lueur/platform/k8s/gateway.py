@@ -27,14 +27,14 @@ async def explore_gateway(credentials: dict[str, Any] | None) -> list[Resource]:
             gateways = await explore_namespaced_gateways(c, ns, "v1")
             resources.extend(gateways)
 
-            gateways = await explore_namespaced_gateways(c, ns, "v1beta1")
-            resources.extend(gateways)
+            # gateways = await explore_namespaced_gateways(c, ns, "v1beta1")
+            # resources.extend(gateways)
 
             gateways = await explore_namespaced_http_routes(c, ns, "v1")
             resources.extend(gateways)
 
-            gateways = await explore_namespaced_http_routes(c, ns, "v1beta1")
-            resources.extend(gateways)
+            # gateways = await explore_namespaced_http_routes(c, ns, "v1beta1")
+            # resources.extend(gateways)
 
     return resources
 
