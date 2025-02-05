@@ -2,7 +2,15 @@
 
 ## [Unreleased][]
 
-[Unreleased]: https://github.com/lueurdev/lueur-python-lib/compare/0.22.2..HEAD
+[Unreleased]: https://github.com/lueurdev/lueur-python-lib/compare/0.22.3..HEAD
+
+## [0.22.3][] - 2025-02-05
+
+[0.22.3]: https://github.com/lueurdev/lueur-python-lib/compare/0.22.2..0.22.3
+
+### Fixed
+
+* Associate only a single gateway/route per deployment
 
 ## [0.22.2][] - 2025-02-03
 

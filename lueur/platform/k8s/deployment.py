@@ -188,7 +188,6 @@ def add_service_links(
 
         p = f"$.resources[?@.id=='{pod_id}' && @.meta.kind=='pod' && @.meta.ns=='{pod_ns}' && {labels}]"  # noqa: E501
         for pod in iter_resource(serialized, p):
-            # we found a match between our current pod and a service
             add_link(
                 d,
                 deployment_resource_id,
@@ -201,41 +200,43 @@ def add_service_links(
                 ),
             )
 
-            svc_name = svc.obj["meta"]["name"]
+            break
 
-            p = f"$.resources[?@.meta.kind=='httproute'].struct.spec.rules.*.backendRefs[?@.kind=='Service' && @.name=='{svc_name}']"  # noqa: E501
-            for httproute in iter_resource(serialized, p):
-                httproute = httproute.parent.parent.parent.parent.parent.parent  # type: ignore
+        svc_name = svc.obj["meta"]["name"]
 
-                add_link(
-                    d,
-                    deployment_resource_id,
-                    Link(
-                        direction="out",
-                        kind="httproute",
-                        id=httproute.obj["id"],  # type: ignore
-                        path=httproute.path,
-                        pointer=str(httproute.pointer()),
-                    ),
-                )
+        p = f"$.resources[?@.meta.kind=='httproute'].struct.spec.rules.*.backendRefs[?@.kind=='Service' && @.name=='{svc_name}']"  # noqa: E501
+        for httproute in iter_resource(serialized, p):
+            httproute = httproute.parent.parent.parent.parent.parent.parent  # type: ignore
 
-                for gw in httproute.obj["struct"]["spec"]["parentRefs"]:
-                    if gw["kind"] != "Gateway":
-                        continue
+            add_link(
+                d,
+                deployment_resource_id,
+                Link(
+                    direction="out",
+                    kind="httproute",
+                    id=httproute.obj["id"],  # type: ignore
+                    path=httproute.path,
+                    pointer=str(httproute.pointer()),
+                ),
+            )
 
-                    gw_name = gw["name"]
-                    p = f"$.resources[?@.meta.kind=='gateway' && @.meta.display=='{gw_name}']"  # noqa: E501
-                    for gw in iter_resource(serialized, p):
-                        add_link(
-                            d,
-                            deployment_resource_id,
-                            Link(
-                                direction="out",
-                                kind="gateway",
-                                id=gw.obj["id"],
-                                path=gw.path,
-                                pointer=str(gw.pointer()),
-                            ),
-                        )
+            for gw in httproute.obj["struct"]["spec"]["parentRefs"]:
+                if gw["kind"] != "Gateway":
+                    continue
+
+                gw_name = gw["name"]
+                p = f"$.resources[?@.meta.kind=='gateway' && @.meta.display=='{gw_name}']"  # noqa: E501
+                for gw in iter_resource(serialized, p):
+                    add_link(
+                        d,
+                        deployment_resource_id,
+                        Link(
+                            direction="out",
+                            kind="gateway",
+                            id=gw.obj["id"],
+                            path=gw.path,
+                            pointer=str(gw.pointer()),
+                        ),
+                    )
 
             break
